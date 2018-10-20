@@ -30,7 +30,7 @@ namespace MitigatingCircumstances.Controllers
 
         public IActionResult Contact()
         {
-            ViewData["Message"] = "Your contact page.";
+            ViewData["Message"] = "Your contact page. Test";
             return View();
         }
 
