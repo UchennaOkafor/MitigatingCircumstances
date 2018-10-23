@@ -1,5 +1,8 @@
 ﻿<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="#">Student Support</a>
+    <a class="navbar-brand" href="#">
+        <img src="https://getbootstrap.com/docs/4.1/assets/brand/bootstrap-solid.svg" width="30" height="30" class="d-inline-block align-top" alt="">
+        Student Support
+    </a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -36,6 +39,7 @@
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="@Url.Action("Index", "Home")">Hi</a>
                     <a class="dropdown-item" href="@Url.Action("Index", "Home")">Bye</a>
+                    <a class="dropdown-item" href="#">Notifications <span class="badge badge-primary">4</span></a>
 
                     <div class="dropdown-divider"></div>
                     <form method="post" action="@Url.Action("Logout", "Auth")">
