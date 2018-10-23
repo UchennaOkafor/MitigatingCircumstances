@@ -38,8 +38,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Views\Student\" />
-    <Folder Include="Views\Teacher\" />
+    <Folder Include="Controllers\Api\" />
+    <Folder Include="wwwroot\images\" />
   </ItemGroup>
 
 </Project>
