@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
+using MitigatingCircumstances.DependencyInjection;
 
 namespace MitigatingCircumstances
 {
@@ -54,7 +55,9 @@ namespace MitigatingCircumstances
                                 options.ServiceName = GetServiceName(Configuration);
                                 options.Version = GetVersion(Configuration);
                             });
+
                         services.AddSingleton<ILoggerProvider>(sp => GoogleLoggerProvider.Create(GcpProjectId));
+                        services.AddServicesDependencies(GcpProjectId);
                     }
                 })
                 .ConfigureLogging(loggingBuilder =>

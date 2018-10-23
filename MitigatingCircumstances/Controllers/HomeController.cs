@@ -1,15 +1,19 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Google.Cloud.Datastore.V1;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using MitigatingCircumstances.Repositories;
 
 namespace MitigatingCircumstances.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger _logger;
+        private readonly IStudentRequestRepository _requestRepository;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IStudentRequestRepository requestRepository)
         {
             _logger = logger;
+            _requestRepository = requestRepository;
         }
 
         public IActionResult Index()
@@ -18,6 +22,10 @@ namespace MitigatingCircumstances.Controllers
             // The Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker logger will log all controller actions with
             // log level information. This log is for additional information.
             _logger.LogInformation("Home page hit!");
+            //_requestRepository.CreateMitigatingRequest();
+            //var entity = _requestRepository.GetStudentRequest();
+            //var log = _requestRepository.GetLog(entity["log"].KeyValue);
+
             return View();
         }
     }
