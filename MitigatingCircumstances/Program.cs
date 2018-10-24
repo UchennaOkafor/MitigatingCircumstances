@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
 using MitigatingCircumstances.DependencyInjection;
+using Microsoft.AspNetCore.Mvc;
 
 namespace MitigatingCircumstances
 {
@@ -41,7 +42,7 @@ namespace MitigatingCircumstances
                 .ConfigureServices(services =>
                 {
                     // Add framework services.Microsoft.VisualStudio.ExtensionManager.ExtensionManagerService
-                    services.AddMvc();
+                    services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1); ;
 
                     if (HasGcpProjectId)
                     {

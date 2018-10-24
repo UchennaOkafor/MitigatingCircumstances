@@ -49,13 +49,16 @@ namespace MitigatingCircumstances.DependencyInjection
         //TODO Rewrite this to include actual logic
         public static void AddServicesDependencies(this IServiceCollection services, IHostingEnvironment environment, string projectId)
         {
+            var db = CreateDatastoreDb(projectId);
+
+            //if (db.)
             if (environment.IsDevelopment())
             {
-                services.AddSingleton(CreateDatastoreDb(projectId));
+                services.AddSingleton(db);
             }
             else if (environment.IsProduction())
             {
-                services.AddSingleton(CreateDatastoreDb(projectId));
+                services.AddSingleton(db);
             }
             else
             {

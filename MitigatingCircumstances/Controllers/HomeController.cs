@@ -23,7 +23,12 @@ namespace MitigatingCircumstances.Controllers
             // log level information. This log is for additional information.
             _logger.LogInformation("Home page hit!");
 
-            _requestRepository.CreateMitigatingRequest();
+            if (true)
+            {
+
+            }
+
+            //_requestRepository.CreateMitigatingRequest();
             //var entity = _requestRepository.GetStudentRequest();
             //var log = _requestRepository.GetLog(entity["student"].KeyValue);
 
