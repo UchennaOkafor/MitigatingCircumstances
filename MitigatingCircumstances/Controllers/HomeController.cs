@@ -8,9 +8,9 @@ namespace MitigatingCircumstances.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger _logger;
-        private readonly IStudentRequestRepository _requestRepository;
+        private readonly ITicketRepository _requestRepository;
 
-        public HomeController(ILogger<HomeController> logger, IStudentRequestRepository requestRepository)
+        public HomeController(ILogger<HomeController> logger, ITicketRepository requestRepository)
         {
             _logger = logger;
             _requestRepository = requestRepository;
@@ -22,9 +22,10 @@ namespace MitigatingCircumstances.Controllers
             // The Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker logger will log all controller actions with
             // log level information. This log is for additional information.
             _logger.LogInformation("Home page hit!");
-            //_requestRepository.CreateMitigatingRequest();
+
+            _requestRepository.CreateMitigatingRequest();
             //var entity = _requestRepository.GetStudentRequest();
-            //var log = _requestRepository.GetLog(entity["log"].KeyValue);
+            //var log = _requestRepository.GetLog(entity["student"].KeyValue);
 
             return View();
         }

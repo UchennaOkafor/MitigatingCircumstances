@@ -2,6 +2,7 @@
 const concat = require('gulp-concat');
 const cleanCSS = require('gulp-clean-css');
 const minify = require('gulp-minify');
+const run = require('gulp-run-command').default;
 
 const vendorStyles = [
     "node_modules/bootstrap/dist/css/bootstrap.min.css",
@@ -29,11 +30,13 @@ gulp.task('build-vendor-js', () => {
         .pipe(gulp.dest('wwwroot'));
 });
 
-gulp.task('font-awesome-fonts', () => {
+gulp.task('copy-font-awesome-fonts', () => {
     return gulp.src(['node_modules/@fortawesome/fontawesome-free/webfonts/fa-*'])
         .pipe(gulp.dest('wwwroot/webfonts'));
 });
 
-gulp.task('build-vendor', gulp.series('build-vendor-css', 'build-vendor-js'));
+gulp.task('start-ds-emulator', run('gcloud beta emulators datastore start'));
+gulp.task('start-dsui', run(`dsui -r ${process.env.DATASTORE_PROJECT_ID} -e  ${process.env.DATASTORE_EMULATOR_HOST}`));
 
+gulp.task('build-vendor', gulp.series('build-vendor-css', 'build-vendor-js'));
 gulp.task('default', gulp.series('build-vendor'));

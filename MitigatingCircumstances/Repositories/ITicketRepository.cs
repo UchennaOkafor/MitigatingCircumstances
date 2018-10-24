@@ -2,7 +2,7 @@
 
 namespace MitigatingCircumstances.Repositories
 {
-    public interface IStudentRequestRepository
+    public interface ITicketRepository
     {
         void CreateMitigatingRequest();
 

@@ -6,12 +6,22 @@ using System.Threading.Tasks;
 
 namespace MitigatingCircumstances.Models
 {
-    public class StudentRequest
+    public class Ticket
     {
-        public Key Id { get; set; }
+        public Key Key { get; set; }
 
         public Student Student { get; set; }
 
         public string Text { get; set; }
+
+        public Entity ToEntity()
+        {
+            return new Entity()
+            {
+                Key = Key,
+                ["Student"] = Student.Key,
+                ["Text"] = Text
+            };
+        }
     }
 }

@@ -9,7 +9,7 @@ namespace MitigatingCircumstances.Models
 {
     public class Student
     {
-        public Key Id { get; set; }
+        public Key Key { get; set; }
 
         public string Firstname { get; set; }
 
