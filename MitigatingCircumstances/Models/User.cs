@@ -1,12 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Security.Claims;
+using System.Security.Principal;
 
 namespace MitigatingCircumstances.Models
 {
-    public class User
+    public class User : ClaimsPrincipal
     {
-        public string Username { get; set; }
+        public User(IPrincipal principal) : base(principal as ClaimsPrincipal) { }
+
+        public string Name => this.Identity.Name;
+        public string UserId => this.FindFirst(ClaimTypes.NameIdentifier).Value;
+        public string ProfileImage => this.FindFirst(ClaimTypes.Uri).Value;
     }
 }

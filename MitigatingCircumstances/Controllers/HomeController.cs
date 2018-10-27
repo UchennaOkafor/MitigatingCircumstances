@@ -25,10 +25,10 @@ namespace MitigatingCircumstances.Controllers
 
             if (true)
             {
-
+                var r = true;
             }
 
-            //_requestRepository.CreateMitigatingRequest();
+            _requestRepository.CreateMitigatingRequest();
             //var entity = _requestRepository.GetStudentRequest();
             //var log = _requestRepository.GetLog(entity["student"].KeyValue);
 

@@ -3,6 +3,7 @@ const concat = require('gulp-concat');
 const cleanCSS = require('gulp-clean-css');
 const minify = require('gulp-minify');
 const run = require('gulp-run-command').default;
+const watch = require('gulp-watch');
 
 const vendorStyles = [
     "node_modules/bootstrap/dist/css/bootstrap.min.css",
@@ -37,7 +38,7 @@ gulp.task('copy-font-awesome-fonts', () => {
 
 gulp.task('start-ds-emulator', run('gcloud beta emulators datastore start'));
 gulp.task('start-dsui', run(`dsui -r ${process.env.DATASTORE_PROJECT_ID} -e  ${process.env.DATASTORE_EMULATOR_HOST}`));
-gulp.task('run-dotnet-run', run('dotnet watch run'));
+gulp.task('start-dotnet-app', run('dotnet watch run'));
 
 gulp.task('build-vendor', gulp.series('build-vendor-css', 'build-vendor-js'));
 gulp.task('default', gulp.series('build-vendor'));

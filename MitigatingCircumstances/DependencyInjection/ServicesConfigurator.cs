@@ -49,23 +49,23 @@ namespace MitigatingCircumstances.DependencyInjection
         //TODO Rewrite this to include actual logic
         public static void AddServicesDependencies(this IServiceCollection services, IHostingEnvironment environment, string projectId)
         {
-            var db = CreateDatastoreDb(projectId);
+            //var db = CreateDatastoreDb(projectId);
 
             //if (db.)
             if (environment.IsDevelopment())
             {
-                services.AddSingleton(db);
+                //services.AddSingleton(db);
             }
             else if (environment.IsProduction())
             {
-                services.AddSingleton(db);
+                //services.AddSingleton(db);
             }
             else
             {
                 //Error
             }
 
-            //services.AddSingleton(DatastoreDb.Create(projectId));
+            services.AddSingleton(DatastoreDb.Create(projectId));
             services.AddTransient<ITicketRepository, StudentTicketRepository>();
         }
     }

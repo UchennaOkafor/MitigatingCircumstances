@@ -28,7 +28,22 @@ namespace MitigatingCircumstances.Repositories
                 ["time_stamp"] = DateTime.UtcNow
             };
 
+            Key rootKey = _db.CreateKeyFactory("User").CreateKey("Alice");
+            Key taskListKey = new KeyFactory(rootKey, "TaskList").CreateKey("default");
+            Key key1 = new KeyFactory(taskListKey, "Task").CreateKey("sampleTask");
+
+
+            var entity2 = new Entity()
+            {
+                Key = key1,
+                ["email"] = "tea&milk@gmail.com",
+                ["method"] = true,
+                ["student"] = _db.AllocateId(_keyFactory.CreateIncompleteKey()),
+                ["time_stamp"] = DateTime.UtcNow
+            };
+
             _db.Insert(entity);
+            _db.Insert(entity2);
         }
 
         public Entity GetStudentRequest()
