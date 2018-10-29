@@ -59,17 +59,6 @@ namespace MitigatingCircumstances
 
                         services.AddSingleton<ILoggerProvider>(sp => GoogleLoggerProvider.Create(GcpProjectId));
                         services.AddServicesDependencies(HostingEnvironment, GcpProjectId);
-
-
-                        //services.AddIdentity<ApplicationUser, IdentityRole>()
-                        //.AddEntityFrameworkStores<ApplicationDbContext>()
-                        //.AddDefaultTokenProviders();
-
-                        services.AddAuthentication().AddGoogle(googleOptions =>
-                        {
-                            googleOptions.ClientId = Configuration["Authentication:Google:ClientId"];
-                            googleOptions.ClientSecret = Configuration["Authentication:Google:ClientSecret"];
-                        });
                     }
                 })
                 .ConfigureLogging(loggingBuilder =>
@@ -124,8 +113,9 @@ namespace MitigatingCircumstances
                         app.UseExceptionHandler("/Home/Error");
                     }
 
+                    app.UseHttpsRedirection();
                     app.UseStatusCodePages();
-
+                    app.UseAuthentication();
                     app.UseStaticFiles();
 
                     app.UseMvc(routes =>

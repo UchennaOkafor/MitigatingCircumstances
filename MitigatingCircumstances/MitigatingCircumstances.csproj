@@ -19,6 +19,7 @@
     <PackageReference Include="Google.Cloud.Diagnostics.AspNetCore" Version="2.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.0" PrivateAssets="All" />
+    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="2.1.2" />
   </ItemGroup>
 
   <Target Name="NpmInstall" BeforeTargets="Build" Inputs="package.json" Outputs="node_modules">
