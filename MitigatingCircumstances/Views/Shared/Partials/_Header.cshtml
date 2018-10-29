@@ -1,6 +1,6 @@
 ﻿<nav class="navbar navbar-top navbar-expand-lg navbar-dark bg-secondary">
     <div class="container">
-        <a class="navbar-brand" href="/">
+        <a class="navbar-brand" asp-controller="Home" asp-action="Index">
             <img src="~/images/logo.svg" width="40" height="31" class="d-inline-block align-top" alt="">
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -9,8 +9,11 @@
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="#">Home</a>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        Notification
+                        <span class="badge badge-primary">4</span>
+                    </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">Teacher</a>
@@ -26,27 +29,7 @@
                 </li>
             </ul>
 
-            <ul class="navbar-nav flex-row ml-md-auto d-none d-md-flex">
-                <li class="nav-item dropdown">
-                    <a class="nav-item nav-link dropdown-toggle mr-md-2" href="#" id="bd-versions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Hi, Username
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="bd-versions">
-                        <a class="dropdown-item active" href="@Url.Action("Index", "Home")">Dashboard</a>
-
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="@Url.Action("Index", "Home")">Hi</a>
-                        <a class="dropdown-item" href="@Url.Action("Index", "Home")">Bye</a>
-                        <a class="dropdown-item" href="#">Notifications <span class="badge badge-primary">4</span></a>
-
-                        <div class="dropdown-divider"></div>
-                        <form method="post" action="@Url.Action("Logout", "Auth")">
-                            @Html.AntiForgeryToken()
-                            <input style="cursor: pointer" type="submit" class="dropdown-item" value="Logout" />
-                        </form>
-                    </div>
-                </li>
-            </ul>
+            <partial name="~/Views/Shared/_LoginPartial.cshtml" />
         </div>
     </div>    
 </nav>

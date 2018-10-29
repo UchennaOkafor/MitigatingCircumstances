@@ -36,9 +36,9 @@ gulp.task('copy-font-awesome-fonts', () => {
         .pipe(gulp.dest('wwwroot/webfonts'));
 });
 
-gulp.task('start-ds-emulator', run('gcloud beta emulators datastore start'));
-gulp.task('start-dsui', run(`dsui -r ${process.env.DATASTORE_PROJECT_ID} -e  ${process.env.DATASTORE_EMULATOR_HOST}`));
-gulp.task('start-dotnet-app', run('dotnet watch run'));
+//gulp.task('start-ds-emulator', run('gcloud beta emulators datastore start'));
+//gulp.task('start-dsui', run(`dsui -r ${process.env.DATASTORE_PROJECT_ID} -e  ${process.env.DATASTORE_EMULATOR_HOST}`));
+gulp.task('start-dotnet-watch', run('dotnet watch run'));
 
 gulp.task('build-vendor', gulp.series('build-vendor-css', 'build-vendor-js'));
 gulp.task('default', gulp.series('build-vendor'));

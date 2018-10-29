@@ -16,7 +16,8 @@ namespace MitigatingCircumstances.Areas.Identity
                 services.AddDbContext<ApplicationDbContext>(options =>
                     options.UseMySql(context.Configuration.GetConnectionString("GoogleCloudSql")));
 
-                services.AddDefaultIdentity<IdentityUser>()
+                services.AddDefaultIdentity<AppUser>()
+                    .AddRoles<IdentityRole>()
                     .AddEntityFrameworkStores<ApplicationDbContext>()
                     .AddDefaultTokenProviders();
 
@@ -24,6 +25,12 @@ namespace MitigatingCircumstances.Areas.Identity
                 {
                     googleOptions.ClientId = context.Configuration["Authentication:Google:ClientId"];
                     googleOptions.ClientSecret = context.Configuration["Authentication:Google:ClientSecret"];
+                });
+
+                services.AddAuthentication().AddMicrosoftAccount(microsoftOptions =>
+                {
+                    microsoftOptions.ClientId = context.Configuration["Authentication:Microsoft:ApplicationId"];
+                    microsoftOptions.ClientSecret = context.Configuration["Authentication:Microsoft:Password"];
                 });
             });
         }

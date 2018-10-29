@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace MitigatingCircumstances.Models
 {
-    public class ApplicationDbContext : IdentityDbContext<IdentityUser>
+    public class ApplicationDbContext : IdentityDbContext<AppUser>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
@@ -28,7 +28,9 @@ namespace MitigatingCircumstances.Models
         public ApplicationDbContext CreateDbContext(string[] args)
         {
             var config = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory()).Build();
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                .Build();
 
             var builder = new DbContextOptionsBuilder<ApplicationDbContext>();
             builder.UseMySql(config.GetConnectionString("GoogleCloudSql"));

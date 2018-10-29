@@ -66,7 +66,11 @@
                             <p>
                                 @foreach (var provider in Model.ExternalLogins)
                                 {
-                                    <button type="submit" class="btn btn-default" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
+                                    <button type="submit" class="btn btn-default btn-lg" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">
+                                        @provider.DisplayName
+
+                                        <img src="~/images/@(provider.Name).svg" alt="OAuth provider Logo" height=32 width=32 />
+                                    </button>
                                 }
                             </p>
                         </div>

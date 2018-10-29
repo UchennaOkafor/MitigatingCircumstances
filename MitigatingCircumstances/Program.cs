@@ -58,7 +58,7 @@ namespace MitigatingCircumstances
                             });
 
                         services.AddSingleton<ILoggerProvider>(sp => GoogleLoggerProvider.Create(GcpProjectId));
-                        services.AddServicesDependencies(HostingEnvironment, GcpProjectId);
+                        services.AddServicesDependencies(GcpProjectId);
                     }
                 })
                 .ConfigureLogging(loggingBuilder =>
