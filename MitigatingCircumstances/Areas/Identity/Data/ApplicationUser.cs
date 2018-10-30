@@ -2,7 +2,7 @@
 
 namespace MitigatingCircumstances.Models
 {
-    public class AppUser : IdentityUser
+    public class ApplicationUser : IdentityUser
     {
         public string Firstname { get; set; }
 

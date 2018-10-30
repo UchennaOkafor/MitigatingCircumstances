@@ -16,13 +16,13 @@ namespace MitigatingCircumstances.Areas.Identity.Pages.Account
     [AllowAnonymous]
     public class ExternalLoginModel : PageModel
     {
-        private readonly SignInManager<AppUser> _signInManager;
-        private readonly UserManager<AppUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly ILogger<ExternalLoginModel> _logger;
 
         public ExternalLoginModel(
-            SignInManager<AppUser> signInManager,
-            UserManager<AppUser> userManager,
+            SignInManager<ApplicationUser> signInManager,
+            UserManager<ApplicationUser> userManager,
             ILogger<ExternalLoginModel> logger)
         {
             _signInManager = signInManager;
@@ -45,6 +45,15 @@ namespace MitigatingCircumstances.Areas.Identity.Pages.Account
             [Required]
             [EmailAddress]
             public string Email { get; set; }
+
+            [Required]
+            public string Firstname { get; set; }
+
+            [Required]
+            public string Lastname { get; set; }
+
+            [Required]
+            public string Role { get; set; }
         }
 
         public IActionResult OnGetAsync()
@@ -91,11 +100,14 @@ namespace MitigatingCircumstances.Areas.Identity.Pages.Account
                 // If the user does not have an account, then ask the user to create an account.
                 ReturnUrl = returnUrl;
                 LoginProvider = info.LoginProvider;
+
                 if (info.Principal.HasClaim(c => c.Type == ClaimTypes.Email))
                 {
                     Input = new InputModel
                     {
-                        Email = info.Principal.FindFirstValue(ClaimTypes.Email)
+                        Email = info.Principal.FindFirstValue(ClaimTypes.Email),
+                        Firstname = info.Principal.FindFirstValue(ClaimTypes.GivenName),
+                        Lastname = info.Principal.FindFirstValue(ClaimTypes.Surname)
                     };
                 }
                 return Page();
@@ -115,7 +127,14 @@ namespace MitigatingCircumstances.Areas.Identity.Pages.Account
 
             if (ModelState.IsValid)
             {
-                var user = new AppUser { UserName = Input.Email, Email = Input.Email };
+                var user = new ApplicationUser
+                {
+                    UserName = Input.Email,
+                    Email = Input.Email,
+                    Firstname = Input.Firstname,
+                    Lastname = Input.Lastname
+                };
+
                 var result = await _userManager.CreateAsync(user);
                 if (result.Succeeded)
                 {

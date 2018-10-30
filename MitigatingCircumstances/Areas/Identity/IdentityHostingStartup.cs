@@ -16,7 +16,7 @@ namespace MitigatingCircumstances.Areas.Identity
                 services.AddDbContext<ApplicationDbContext>(options =>
                     options.UseMySql(context.Configuration.GetConnectionString("GoogleCloudSql")));
 
-                services.AddDefaultIdentity<AppUser>()
+                services.AddDefaultIdentity<ApplicationUser>()
                     .AddRoles<IdentityRole>()
                     .AddEntityFrameworkStores<ApplicationDbContext>()
                     .AddDefaultTokenProviders();

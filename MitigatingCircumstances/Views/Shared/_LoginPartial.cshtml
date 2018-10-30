@@ -1,8 +1,8 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @using MitigatingCircumstances.Models
 
-@inject SignInManager<AppUser> SignInManager
-@inject UserManager<AppUser> UserManager
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
 
 @if (SignInManager.IsSignedIn(User))
 {
