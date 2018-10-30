@@ -1,0 +1,16 @@
+﻿@page
+@model LogoutModel
+@{
+    ViewData["Title"] = "Log out";
+}
+
+<header>
+    <h1>@ViewData["Title"]</h1>
+    <p class="lead">You have successfully logged out of the application. You will be redirected to the homepage in 3 seconds...</p>
+</header>
+
+@section Scripts {
+    <script>
+        setTimeout(() => window.location.href = "/", 3000);
+    </script>
+}
