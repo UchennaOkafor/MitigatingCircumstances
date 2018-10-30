@@ -1,10 +1,11 @@
-﻿using Google.Cloud.Datastore.V1;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using MitigatingCircumstances.Repositories;
 
 namespace MitigatingCircumstances.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly ILogger _logger;

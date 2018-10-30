@@ -4,6 +4,7 @@
 @{
     var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
 }
+
 <ul class="nav flex-column">
     <li class="@ManageNavPages.IndexNavClass(ViewContext)">
         <a asp-page="./Index">Profile</a>

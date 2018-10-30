@@ -10,6 +10,7 @@ using System;
 using System.IO;
 using MitigatingCircumstances.DependencyInjection;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.HttpOverrides;
 
 namespace MitigatingCircumstances
 {
@@ -74,6 +75,11 @@ namespace MitigatingCircumstances
                 })
                 .Configure((app) =>
                 {
+                    app.UseForwardedHeaders(new ForwardedHeadersOptions
+                    {
+                        ForwardedHeaders = ForwardedHeaders.XForwardedProto
+                    });
+
                     var logger = app.ApplicationServices.GetService<ILoggerFactory>().CreateLogger("Startup");
                     if (HasGcpProjectId)
                     {
