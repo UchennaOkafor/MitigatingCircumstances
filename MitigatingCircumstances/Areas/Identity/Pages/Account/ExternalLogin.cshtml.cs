@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using MitigatingCircumstances.Models;
+using MitigatingCircumstances.Models.Static;
 
 namespace MitigatingCircumstances.Areas.Identity.Pages.Account
 {
@@ -138,6 +139,8 @@ namespace MitigatingCircumstances.Areas.Identity.Pages.Account
                 var result = await _userManager.CreateAsync(user);
                 if (result.Succeeded)
                 {
+                    await _userManager.AddToRoleAsync(user, Roles.Teacher);
+
                     result = await _userManager.AddLoginAsync(user, info);
                     if (result.Succeeded)
                     {

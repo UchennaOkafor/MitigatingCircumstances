@@ -1,14 +1,21 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @using MitigatingCircumstances.Models
+@using MitigatingCircumstances.Models.Static
 
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
+
+@*@{ 
+    string existingRole = UserManager.GetRolesAsync(null).Result.Single();
+}
+
+<p class="lead">@existingRole</p>*@
 
 <div class="collapse navbar-collapse" id="navbarSupportedContent">
     @if (SignInManager.IsSignedIn(User))
     {
         <ul class="navbar-nav mr-auto">
-            @if (User.IsInRole("Teacher"))
+            @if (User.IsInRole(Roles.Teacher))
             {
                 <li class="nav-item">
                     <a class="nav-link" href="#">
@@ -20,7 +27,7 @@
                     <a class="nav-link" href="#">Teacher</a>
                 </li>
             }
-            else if (User.IsInRole("Student"))
+            else if (User.IsInRole(Roles.Student))
             {
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

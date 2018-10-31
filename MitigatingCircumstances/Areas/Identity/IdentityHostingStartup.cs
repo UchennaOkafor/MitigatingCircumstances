@@ -18,8 +18,7 @@ namespace MitigatingCircumstances.Areas.Identity
 
                 services.AddDefaultIdentity<ApplicationUser>()
                     .AddRoles<IdentityRole>()
-                    .AddEntityFrameworkStores<ApplicationDbContext>()
-                    .AddDefaultTokenProviders();
+                    .AddEntityFrameworkStores<ApplicationDbContext>();
 
                 services.AddAuthentication().AddGoogle(googleOptions =>
                 {
