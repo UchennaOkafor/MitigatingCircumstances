@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.HttpOverrides;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using MitigatingCircumstances.Models.Static;
+using MitigatingCircumstances.Models;
 
 namespace MitigatingCircumstances
 {

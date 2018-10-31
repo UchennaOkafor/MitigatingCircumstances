@@ -5,25 +5,24 @@
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 
-@{ var appUser = await UserManager.GetUserAsync(User); }
-
 <div class="collapse navbar-collapse" id="navbarSupportedContent">
     @if (SignInManager.IsSignedIn(User))
     {
+        var appUser = await UserManager.GetUserAsync(User);
+
         <ul class="navbar-nav mr-auto">
-            @if(await UserManager.IsInRoleAsync(appUser, Roles.Teacher))
+            @if (User.IsInRole(Roles.Teacher))
             {
                 <li class="nav-item">
-                    <a class="nav-link" href="#">
+                    <a class="nav-link" asp-action="Applications" asp-controller="Teacher">
                         Student applications
-                        <span class="badge badge-primary">4</span>
                     </a>
                 </li>
             }
-            else if (await UserManager.IsInRoleAsync(appUser, Roles.Student))
+            else if (User.IsInRole(Roles.Student))
             {
                 <li class="nav-item">
-                    <a class="nav-link" href="#">My applications</a>
+                    <a class="nav-link" asp-action="Applications" asp-controller="Student">My applications</a>
                 </li>
             }
         </ul>
@@ -38,7 +37,7 @@
 
             <li class="nav-item dropdown">
                 <a class="nav-item nav-link dropdown-toggle mr-md-2 pointer" data-toggle="dropdown">
-                    Hi, @((await UserManager.GetUserAsync(User)).Firstname)
+                    Hi, @appUser.Firstname
                 </a>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="bd-versions">
                     <a asp-area="Identity" asp-page="/Account/Manage/Index" class="dropdown-item">Profile</a>
