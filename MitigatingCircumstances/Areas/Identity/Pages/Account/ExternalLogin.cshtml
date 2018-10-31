@@ -32,8 +32,7 @@
 
             <div class="form-group">
                 <label asp-for="Input.Role"></label>
-                <input asp-for="Input.Role" class="form-control" />
-                <span asp-validation-for="Input.Role" class="text-danger"></span>
+                <select asp-for="Input.Role" asp-items="@Model.Input.AvailableRoles" class="form-control"></select>
             </div>
 
             <div class="form-group">

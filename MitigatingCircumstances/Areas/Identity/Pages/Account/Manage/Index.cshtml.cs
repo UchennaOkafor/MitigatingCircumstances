@@ -45,6 +45,9 @@ namespace MitigatingCircumstances.Areas.Identity.Pages.Account.Manage
 
             [Required]
             public string Lastname { get; set; }
+
+            [Required]
+            public string Role { get; set; }
         }
 
         public async Task<IActionResult> OnGetAsync()
@@ -57,12 +60,14 @@ namespace MitigatingCircumstances.Areas.Identity.Pages.Account.Manage
 
             var email = await _userManager.GetEmailAsync(user);
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
+            var roles = await _userManager.GetRolesAsync(user); //User should only have one role atm
 
             Input = new InputModel
             {
                 Email = email,
                 Firstname = user.Firstname,
-                Lastname = user.Lastname
+                Lastname = user.Lastname,
+                Role = roles.FirstOrDefault()
             };
 
             return Page();

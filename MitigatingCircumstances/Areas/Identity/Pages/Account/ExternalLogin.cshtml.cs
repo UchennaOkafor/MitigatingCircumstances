@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using MitigatingCircumstances.Models;
 using MitigatingCircumstances.Models.Static;
@@ -54,7 +55,14 @@ namespace MitigatingCircumstances.Areas.Identity.Pages.Account
             public string Lastname { get; set; }
 
             [Required]
+            [Display(Name = "I am a")]
             public string Role { get; set; }
+
+            public List<SelectListItem> AvailableRoles { get; } = new List<SelectListItem>
+            {
+                new SelectListItem { Value = Roles.Teacher, Text = Roles.Teacher },
+                new SelectListItem { Value = Roles.Student, Text = Roles.Student }
+            };
         }
 
         public IActionResult OnGetAsync()
@@ -126,6 +134,11 @@ namespace MitigatingCircumstances.Areas.Identity.Pages.Account
                 return RedirectToPage("./Login", new { ReturnUrl = returnUrl });
             }
 
+            if (Input.Role != Roles.Teacher || Input.Role != Roles.Student)
+            {
+                ModelState.AddModelError(string.Empty, "Invalid role submitted");
+            }
+
             if (ModelState.IsValid)
             {
                 var user = new ApplicationUser
@@ -139,16 +152,20 @@ namespace MitigatingCircumstances.Areas.Identity.Pages.Account
                 var result = await _userManager.CreateAsync(user);
                 if (result.Succeeded)
                 {
-                    await _userManager.AddToRoleAsync(user, Roles.Teacher);
+                    result = await _userManager.AddToRoleAsync(user, Input.Role);
 
-                    result = await _userManager.AddLoginAsync(user, info);
                     if (result.Succeeded)
                     {
-                        await _signInManager.SignInAsync(user, isPersistent: false);
-                        _logger.LogInformation("User created an account using {Name} provider.", info.LoginProvider);
-                        return LocalRedirect(returnUrl);
+                        result = await _userManager.AddLoginAsync(user, info);
+                        if (result.Succeeded)
+                        {
+                            await _signInManager.SignInAsync(user, isPersistent: false);
+                            _logger.LogInformation("User created an account using {Name} provider.", info.LoginProvider);
+                            return LocalRedirect(returnUrl);
+                        }
                     }
                 }
+
                 foreach (var error in result.Errors)
                 {
                     ModelState.AddModelError(string.Empty, error.Description);
