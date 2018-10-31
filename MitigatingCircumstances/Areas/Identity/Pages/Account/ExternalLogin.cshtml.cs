@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Security.Claims;
@@ -11,7 +10,6 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using MitigatingCircumstances.Models;
-using MitigatingCircumstances.Models.Static;
 
 namespace MitigatingCircumstances.Areas.Identity.Pages.Account
 {
@@ -20,15 +18,18 @@ namespace MitigatingCircumstances.Areas.Identity.Pages.Account
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly ILogger<ExternalLoginModel> _logger;
 
         public ExternalLoginModel(
             SignInManager<ApplicationUser> signInManager,
             UserManager<ApplicationUser> userManager,
+            RoleManager<IdentityRole> roleManager,
             ILogger<ExternalLoginModel> logger)
         {
             _signInManager = signInManager;
             _userManager = userManager;
+            _roleManager = roleManager;
             _logger = logger;
         }
 
@@ -58,11 +59,7 @@ namespace MitigatingCircumstances.Areas.Identity.Pages.Account
             [Display(Name = "I am a")]
             public string Role { get; set; }
 
-            public List<SelectListItem> AvailableRoles { get; } = new List<SelectListItem>
-            {
-                new SelectListItem { Value = Roles.Teacher, Text = Roles.Teacher },
-                new SelectListItem { Value = Roles.Student, Text = Roles.Student }
-            };
+            public List<SelectListItem> AvailableRoles { get; set; }
         }
 
         public IActionResult OnGetAsync()
@@ -112,11 +109,14 @@ namespace MitigatingCircumstances.Areas.Identity.Pages.Account
 
                 if (info.Principal.HasClaim(c => c.Type == ClaimTypes.Email))
                 {
+                    var roles = _roleManager.Roles;
+
                     Input = new InputModel
                     {
                         Email = info.Principal.FindFirstValue(ClaimTypes.Email),
                         Firstname = info.Principal.FindFirstValue(ClaimTypes.GivenName),
-                        Lastname = info.Principal.FindFirstValue(ClaimTypes.Surname)
+                        Lastname = info.Principal.FindFirstValue(ClaimTypes.Surname),
+                        AvailableRoles = roles.Select(r => new SelectListItem { Value = r.Name, Text = r.Name }).ToList()
                     };
                 }
                 return Page();
@@ -134,9 +134,10 @@ namespace MitigatingCircumstances.Areas.Identity.Pages.Account
                 return RedirectToPage("./Login", new { ReturnUrl = returnUrl });
             }
 
-            if (Input.Role != Roles.Teacher || Input.Role != Roles.Student)
+            var roleExists = await _roleManager.RoleExistsAsync(Input.Role);
+            if (! roleExists)
             {
-                ModelState.AddModelError(string.Empty, "Invalid role submitted");
+                ModelState.AddModelError(string.Empty, "Role submitted is not recognized");
             }
 
             if (ModelState.IsValid)

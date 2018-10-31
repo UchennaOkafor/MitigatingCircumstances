@@ -22,19 +22,20 @@
             }
             else if (await UserManager.IsInRoleAsync(appUser, Roles.Student))
             {
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        My applications
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="@Url.Action("Create", "Student")">View</a>
-                        <a class="dropdown-item" href="@Url.Action("Index", "Student")">Create new</a>
-                    </div>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">My applications</a>
                 </li>
             }
         </ul>
 
         <ul class="navbar-nav flex-row ml-md-auto d-none d-md-flex">
+            <li class="nav-item dropdown notification-badge">
+                <a class="nav-link" href="#">
+                    <i class="fas fa-bell"></i>
+                    <span class="badge badge-primary">4</span>
+                </a>
+            </li>
+
             <li class="nav-item dropdown">
                 <a class="nav-item nav-link dropdown-toggle mr-md-2 pointer" data-toggle="dropdown">
                     Hi, @((await UserManager.GetUserAsync(User)).Firstname)
