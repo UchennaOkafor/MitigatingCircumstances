@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MitigatingCircumstances.Models;
 
 namespace MitigatingCircumstances.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20181208212241_ModelsUpdate")]
+    partial class ModelsUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -190,23 +192,23 @@ namespace MitigatingCircumstances.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("AssignedToId");
+
                     b.Property<DateTime>("CreatedAt");
+
+                    b.Property<string>("CreatedById");
 
                     b.Property<string>("Message");
 
                     b.Property<int?>("Status");
 
-                    b.Property<string>("StudentCreatedById");
-
-                    b.Property<string>("TeacherAssignedToId");
-
                     b.Property<string>("Title");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("StudentCreatedById");
+                    b.HasIndex("AssignedToId");
 
-                    b.HasIndex("TeacherAssignedToId");
+                    b.HasIndex("CreatedById");
 
                     b.ToTable("SupportTickets");
                 });
@@ -281,13 +283,13 @@ namespace MitigatingCircumstances.Migrations
 
             modelBuilder.Entity("MitigatingCircumstances.Models.SupportTicket", b =>
                 {
-                    b.HasOne("MitigatingCircumstances.Models.ApplicationUser", "StudentCreatedBy")
+                    b.HasOne("MitigatingCircumstances.Models.ApplicationUser", "AssignedTo")
                         .WithMany()
-                        .HasForeignKey("StudentCreatedById");
+                        .HasForeignKey("AssignedToId");
 
-                    b.HasOne("MitigatingCircumstances.Models.ApplicationUser", "TeacherAssignedTo")
+                    b.HasOne("MitigatingCircumstances.Models.ApplicationUser", "CreatedBy")
                         .WithMany()
-                        .HasForeignKey("TeacherAssignedToId");
+                        .HasForeignKey("CreatedById");
                 });
 
             modelBuilder.Entity("MitigatingCircumstances.Models.SupportTicketReply", b =>

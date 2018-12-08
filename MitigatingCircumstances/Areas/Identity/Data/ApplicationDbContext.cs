@@ -13,6 +13,9 @@ namespace MitigatingCircumstances.Models
         {
         }
 
+        public DbSet<SupportTicket> SupportTickets { get; set; }
+        public DbSet<SupportTicketReply> SupportTicketReplies { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -34,7 +37,7 @@ namespace MitigatingCircumstances.Models
             var builder = new DbContextOptionsBuilder<ApplicationDbContext>();
 
             //builder.UseMySql(config.GetConnectionString("GoogleCloudMySql"));
-            //builder.UseSqlServer(config.GetConnectionString("LocalMsSqlServer"));
+            builder.UseSqlServer(config.GetConnectionString("LocalMsSqlServer"));
 
             return new ApplicationDbContext(builder.Options);
         }

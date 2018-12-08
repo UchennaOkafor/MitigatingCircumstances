@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MitigatingCircumstances.Models;
@@ -9,15 +10,16 @@ using MitigatingCircumstances.Models;
 namespace MitigatingCircumstances.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20181029193028_CreateIdentitySchema")]
-    partial class CreateIdentitySchema
+    [Migration("20181208213304_ModelsUpdate2")]
+    partial class ModelsUpdate2
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "2.1.4-rtm-31024")
-                .HasAnnotation("Relational:MaxIdentifierLength", 64);
+                .HasAnnotation("Relational:MaxIdentifierLength", 128)
+                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
@@ -37,7 +39,8 @@ namespace MitigatingCircumstances.Migrations
 
                     b.HasIndex("NormalizedName")
                         .IsUnique()
-                        .HasName("RoleNameIndex");
+                        .HasName("RoleNameIndex")
+                        .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles");
                 });
@@ -45,7 +48,8 @@ namespace MitigatingCircumstances.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("ClaimType");
 
@@ -64,7 +68,8 @@ namespace MitigatingCircumstances.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("ClaimType");
 
@@ -126,7 +131,7 @@ namespace MitigatingCircumstances.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("MitigatingCircumstances.Models.AppUser", b =>
+            modelBuilder.Entity("MitigatingCircumstances.Models.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
@@ -175,9 +180,60 @@ namespace MitigatingCircumstances.Migrations
 
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
-                        .HasName("UserNameIndex");
+                        .HasName("UserNameIndex")
+                        .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
+                });
+
+            modelBuilder.Entity("MitigatingCircumstances.Models.SupportTicket", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreatedAt");
+
+                    b.Property<string>("Message");
+
+                    b.Property<int?>("Status");
+
+                    b.Property<string>("StudentCreatedById");
+
+                    b.Property<string>("TeacherAssignedToId");
+
+                    b.Property<string>("Title");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StudentCreatedById");
+
+                    b.HasIndex("TeacherAssignedToId");
+
+                    b.ToTable("SupportTickets");
+                });
+
+            modelBuilder.Entity("MitigatingCircumstances.Models.SupportTicketReply", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Comment");
+
+                    b.Property<DateTime>("CreatedAt");
+
+                    b.Property<int?>("SupportTicketId");
+
+                    b.Property<string>("UserId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SupportTicketId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("SupportTicketReplies");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -190,7 +246,7 @@ namespace MitigatingCircumstances.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("MitigatingCircumstances.Models.AppUser")
+                    b.HasOne("MitigatingCircumstances.Models.ApplicationUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -198,7 +254,7 @@ namespace MitigatingCircumstances.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("MitigatingCircumstances.Models.AppUser")
+                    b.HasOne("MitigatingCircumstances.Models.ApplicationUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -211,7 +267,7 @@ namespace MitigatingCircumstances.Migrations
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("MitigatingCircumstances.Models.AppUser")
+                    b.HasOne("MitigatingCircumstances.Models.ApplicationUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -219,10 +275,32 @@ namespace MitigatingCircumstances.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("MitigatingCircumstances.Models.AppUser")
+                    b.HasOne("MitigatingCircumstances.Models.ApplicationUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("MitigatingCircumstances.Models.SupportTicket", b =>
+                {
+                    b.HasOne("MitigatingCircumstances.Models.ApplicationUser", "StudentCreatedBy")
+                        .WithMany()
+                        .HasForeignKey("StudentCreatedById");
+
+                    b.HasOne("MitigatingCircumstances.Models.ApplicationUser", "TeacherAssignedTo")
+                        .WithMany()
+                        .HasForeignKey("TeacherAssignedToId");
+                });
+
+            modelBuilder.Entity("MitigatingCircumstances.Models.SupportTicketReply", b =>
+                {
+                    b.HasOne("MitigatingCircumstances.Models.SupportTicket", "SupportTicket")
+                        .WithMany()
+                        .HasForeignKey("SupportTicketId");
+
+                    b.HasOne("MitigatingCircumstances.Models.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
                 });
 #pragma warning restore 612, 618
         }

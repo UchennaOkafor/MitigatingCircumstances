@@ -9,12 +9,12 @@ namespace MitigatingCircumstances.Models
     {
         public int Id { get; set; }
 
-        public SupportTicket SupportTicket { get; set; }
+        public virtual SupportTicket SupportTicket { get; set; }
 
-        public ApplicationUser User { get; set; }
+        public virtual ApplicationUser User { get; set; }
 
         public string Comment { get; set; }
 
-        public DateTime Created { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow.ToLocalTime();
     }
 }

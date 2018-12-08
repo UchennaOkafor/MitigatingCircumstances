@@ -7,16 +7,16 @@ namespace MitigatingCircumstances.Models
     {
         public int Id { get; set; }
 
-        public ApplicationUser CreatedBy { get; set; }
+        public virtual ApplicationUser StudentCreatedBy { get; set; }
 
-        public ApplicationUser AssignedTo { get; set; }
+        public virtual ApplicationUser TeacherAssignedTo { get; set; }
 
         public string Title { get; set; }
 
         public string Message { get; set; }
 
-        public DateTime Created { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow.ToLocalTime();
 
-        public TicketStatus Status { get; set; }
+        public virtual TicketStatus? Status { get; set; }
     }
 }
