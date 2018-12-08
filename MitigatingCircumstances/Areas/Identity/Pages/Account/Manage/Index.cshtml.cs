@@ -46,7 +46,6 @@ namespace MitigatingCircumstances.Areas.Identity.Pages.Account.Manage
             [Required]
             public string Lastname { get; set; }
 
-            [Required]
             public string Role { get; set; }
         }
 

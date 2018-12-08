@@ -14,8 +14,17 @@ namespace MitigatingCircumstances.Areas.Identity
         {
             builder.ConfigureServices((context, services) => {
                 services.AddDbContext<ApplicationDbContext>(options =>
-                    options.UseMySql(context.Configuration.GetConnectionString("GoogleCloudSql")));
-
+                {
+                    if (context.HostingEnvironment.IsProduction() ||context.HostingEnvironment.IsStaging())
+                    {
+                        options.UseMySql(context.Configuration.GetConnectionString("GoogleCloudMySql"));
+                    }
+                    else
+                    {
+                        options.UseSqlServer(context.Configuration.GetConnectionString("LocalMsSqlServer"));
+                    }
+                });
+                
                 services.AddIdentity<ApplicationUser, IdentityRole>()
                     .AddEntityFrameworkStores<ApplicationDbContext>()
                     .AddDefaultUI();

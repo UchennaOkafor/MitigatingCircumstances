@@ -1,0 +1,49 @@
+﻿@{
+    ViewData["Title"] = "Create Applications";
+}
+
+<form method="post" asp-action="">
+    <div class="form-group">
+        <label for="exampleFormControlInput1">Title</label>
+        <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com">
+    </div>
+    <div class="form-group">
+        <label for="exampleFormControlTextarea1">Mitigating Circumstance</label>
+        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+    </div>
+
+    <div class="form-group">
+        <div class="custom-file">
+            <input type="file" class="custom-file-input" id="validatedCustomFile" multiple>
+            <label class="custom-file-label" for="validatedCustomFile">Choose file...</label>
+            <div class="invalid-feedback">Example invalid custom file feedback</div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>
+            <strong>Files you selected</strong>
+        </label>
+        <ul id="hi">
+            
+        </ul>
+    </div>
+
+    <button type="submit" class="btn btn-primary float-right">Create new</button>
+</form>
+
+@section scripts {
+    <script>
+        $("#validatedCustomFile").on("change", (e) => {
+            var files = $(e.currentTarget)[0].files;
+            $("#hi").html("");
+
+            $(files).each((i, file) => {
+                var fileName = file.name;
+                var fileSize = file.size;
+
+                $("#hi").append($(`<li>${fileName}</li>`));
+            });
+        });
+    </script>
+}

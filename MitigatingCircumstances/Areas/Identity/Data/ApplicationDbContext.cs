@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
@@ -33,7 +32,9 @@ namespace MitigatingCircumstances.Models
                 .Build();
 
             var builder = new DbContextOptionsBuilder<ApplicationDbContext>();
-            builder.UseMySql(config.GetConnectionString("GoogleCloudSql"));
+
+            //builder.UseMySql(config.GetConnectionString("GoogleCloudMySql"));
+            //builder.UseSqlServer(config.GetConnectionString("LocalMsSqlServer"));
 
             return new ApplicationDbContext(builder.Options);
         }
