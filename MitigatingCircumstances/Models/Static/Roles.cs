@@ -3,7 +3,7 @@
     //TODO make this an enum
     public static class Roles
     {
-        public const string Teacher = "Teacher";
+        public const string Tutor = "Tutor";
 
         public const string Student = "Student";
     }

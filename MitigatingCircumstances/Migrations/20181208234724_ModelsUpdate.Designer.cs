@@ -10,7 +10,7 @@ using MitigatingCircumstances.Models;
 namespace MitigatingCircumstances.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20181208212241_ModelsUpdate")]
+    [Migration("20181208234724_ModelsUpdate")]
     partial class ModelsUpdate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -192,23 +192,23 @@ namespace MitigatingCircumstances.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("AssignedToId");
-
                     b.Property<DateTime>("CreatedAt");
-
-                    b.Property<string>("CreatedById");
 
                     b.Property<string>("Message");
 
                     b.Property<int?>("Status");
 
+                    b.Property<string>("StudentCreatedById");
+
                     b.Property<string>("Title");
+
+                    b.Property<string>("TutorAssignedToId");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AssignedToId");
+                    b.HasIndex("StudentCreatedById");
 
-                    b.HasIndex("CreatedById");
+                    b.HasIndex("TutorAssignedToId");
 
                     b.ToTable("SupportTickets");
                 });
@@ -234,6 +234,25 @@ namespace MitigatingCircumstances.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("SupportTicketReplies");
+                });
+
+            modelBuilder.Entity("MitigatingCircumstances.Models.UploadedDocument", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("SupportTicketId");
+
+                    b.Property<string>("UploadedBy");
+
+                    b.Property<string>("Url");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SupportTicketId");
+
+                    b.ToTable("UploadedDocument");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -283,13 +302,13 @@ namespace MitigatingCircumstances.Migrations
 
             modelBuilder.Entity("MitigatingCircumstances.Models.SupportTicket", b =>
                 {
-                    b.HasOne("MitigatingCircumstances.Models.ApplicationUser", "AssignedTo")
+                    b.HasOne("MitigatingCircumstances.Models.ApplicationUser", "StudentCreatedBy")
                         .WithMany()
-                        .HasForeignKey("AssignedToId");
+                        .HasForeignKey("StudentCreatedById");
 
-                    b.HasOne("MitigatingCircumstances.Models.ApplicationUser", "CreatedBy")
+                    b.HasOne("MitigatingCircumstances.Models.ApplicationUser", "TutorAssignedTo")
                         .WithMany()
-                        .HasForeignKey("CreatedById");
+                        .HasForeignKey("TutorAssignedToId");
                 });
 
             modelBuilder.Entity("MitigatingCircumstances.Models.SupportTicketReply", b =>
@@ -301,6 +320,13 @@ namespace MitigatingCircumstances.Migrations
                     b.HasOne("MitigatingCircumstances.Models.ApplicationUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("MitigatingCircumstances.Models.UploadedDocument", b =>
+                {
+                    b.HasOne("MitigatingCircumstances.Models.SupportTicket")
+                        .WithMany("UploadedDocuments")
+                        .HasForeignKey("SupportTicketId");
                 });
 #pragma warning restore 612, 618
         }

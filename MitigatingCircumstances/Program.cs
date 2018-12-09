@@ -14,7 +14,6 @@ using Microsoft.AspNetCore.HttpOverrides;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using MitigatingCircumstances.Models.Static;
-using MitigatingCircumstances.Models;
 
 namespace MitigatingCircumstances
 {
@@ -212,7 +211,7 @@ namespace MitigatingCircumstances
         private static async Task CreateRoles(IServiceProvider serviceProvider)
         {
             var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-            var roles = new [] { Roles.Teacher, Roles.Student };
+            var roles = new [] { Roles.Tutor, Roles.Student };
 
             foreach (var role in roles)
             {

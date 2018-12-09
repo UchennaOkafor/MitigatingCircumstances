@@ -11,10 +11,10 @@
         var appUser = await UserManager.GetUserAsync(User);
 
         <ul class="navbar-nav mr-auto">
-            @if (User.IsInRole(Roles.Teacher))
+            @if (User.IsInRole(Roles.Tutor))
             {
                 <li class="nav-item">
-                    <a class="nav-link" asp-action="Applications" asp-controller="Teacher">
+                    <a class="nav-link" asp-action="Applications" asp-controller="Tutor">
                         Student applications
                     </a>
                 </li>

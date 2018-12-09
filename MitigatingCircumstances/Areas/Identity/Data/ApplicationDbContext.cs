@@ -14,7 +14,10 @@ namespace MitigatingCircumstances.Models
         }
 
         public DbSet<SupportTicket> SupportTickets { get; set; }
+
         public DbSet<SupportTicketReply> SupportTicketReplies { get; set; }
+
+        public DbSet<UploadedDocument> UploadedDocuments { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

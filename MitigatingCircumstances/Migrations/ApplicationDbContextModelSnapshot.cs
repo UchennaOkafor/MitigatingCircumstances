@@ -198,15 +198,15 @@ namespace MitigatingCircumstances.Migrations
 
                     b.Property<string>("StudentCreatedById");
 
-                    b.Property<string>("TeacherAssignedToId");
-
                     b.Property<string>("Title");
+
+                    b.Property<string>("TutorAssignedToId");
 
                     b.HasKey("Id");
 
                     b.HasIndex("StudentCreatedById");
 
-                    b.HasIndex("TeacherAssignedToId");
+                    b.HasIndex("TutorAssignedToId");
 
                     b.ToTable("SupportTickets");
                 });
@@ -232,6 +232,27 @@ namespace MitigatingCircumstances.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("SupportTicketReplies");
+                });
+
+            modelBuilder.Entity("MitigatingCircumstances.Models.UploadedDocument", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("SupportTicketId");
+
+                    b.Property<string>("UploadedById");
+
+                    b.Property<string>("Url");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SupportTicketId");
+
+                    b.HasIndex("UploadedById");
+
+                    b.ToTable("UploadedDocuments");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -285,9 +306,9 @@ namespace MitigatingCircumstances.Migrations
                         .WithMany()
                         .HasForeignKey("StudentCreatedById");
 
-                    b.HasOne("MitigatingCircumstances.Models.ApplicationUser", "TeacherAssignedTo")
+                    b.HasOne("MitigatingCircumstances.Models.ApplicationUser", "TutorAssignedTo")
                         .WithMany()
-                        .HasForeignKey("TeacherAssignedToId");
+                        .HasForeignKey("TutorAssignedToId");
                 });
 
             modelBuilder.Entity("MitigatingCircumstances.Models.SupportTicketReply", b =>
@@ -299,6 +320,17 @@ namespace MitigatingCircumstances.Migrations
                     b.HasOne("MitigatingCircumstances.Models.ApplicationUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("MitigatingCircumstances.Models.UploadedDocument", b =>
+                {
+                    b.HasOne("MitigatingCircumstances.Models.SupportTicket")
+                        .WithMany("UploadedDocuments")
+                        .HasForeignKey("SupportTicketId");
+
+                    b.HasOne("MitigatingCircumstances.Models.ApplicationUser", "UploadedBy")
+                        .WithMany()
+                        .HasForeignKey("UploadedById");
                 });
 #pragma warning restore 612, 618
         }

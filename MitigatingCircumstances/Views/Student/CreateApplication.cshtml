@@ -5,45 +5,28 @@
 <form method="post" asp-action="">
     <div class="form-group">
         <label for="exampleFormControlInput1">Title</label>
-        <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com">
+        <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Placeholder">
     </div>
     <div class="form-group">
         <label for="exampleFormControlTextarea1">Mitigating Circumstance</label>
-        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+        <textarea class="form-control" id="exampleFormControlTextarea1" rows="4"></textarea>
     </div>
 
     <div class="form-group">
-        <div class="custom-file">
-            <input type="file" class="custom-file-input" id="validatedCustomFile" multiple>
-            <label class="custom-file-label" for="validatedCustomFile">Choose file...</label>
-            <div class="invalid-feedback">Example invalid custom file feedback</div>
-        </div>
+        <label for="exampleFormControlSelect1">Assigned tutor</label>
+        <select class="form-control col-4" id="exampleFormControlSelect1">
+            <option>Tutor 1</option>
+            <option>Tutor 2</option>
+            <option>Tutor 3</option>
+            <option>Tutor 4</option>
+            <option>Tutor 5</option>
+        </select>
     </div>
 
     <div class="form-group">
-        <label>
-            <strong>Files you selected</strong>
-        </label>
-        <ul id="hi">
-            
-        </ul>
+        <label for="exampleFormControlFile1">Supporting evidence</label>
+        <input type="file" class="form-control-file" id="exampleFormControlFile1" multiple>
     </div>
 
-    <button type="submit" class="btn btn-primary float-right">Create new</button>
+    <button type="submit" class="btn btn-primary float-right">Submit</button>
 </form>
-
-@section scripts {
-    <script>
-        $("#validatedCustomFile").on("change", (e) => {
-            var files = $(e.currentTarget)[0].files;
-            $("#hi").html("");
-
-            $(files).each((i, file) => {
-                var fileName = file.name;
-                var fileSize = file.size;
-
-                $("#hi").append($(`<li>${fileName}</li>`));
-            });
-        });
-    </script>
-}

@@ -1,5 +1,6 @@
 ﻿using MitigatingCircumstances.Models.Enum;
 using System;
+using System.Collections.Generic;
 
 namespace MitigatingCircumstances.Models
 {
@@ -9,11 +10,13 @@ namespace MitigatingCircumstances.Models
 
         public virtual ApplicationUser StudentCreatedBy { get; set; }
 
-        public virtual ApplicationUser TeacherAssignedTo { get; set; }
+        public virtual ApplicationUser TutorAssignedTo { get; set; }
 
         public string Title { get; set; }
 
         public string Message { get; set; }
+
+        public virtual ICollection<UploadedDocument> UploadedDocuments { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow.ToLocalTime();
 

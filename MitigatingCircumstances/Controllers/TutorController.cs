@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MitigatingCircumstances.Controllers
 {
-    public class TeacherController : Controller
+    public class TutorController : Controller
     {
-        [Authorize(Roles = "Teacher")]
+        [Authorize(Roles = "Tutor")]
         public IActionResult Applications()
         {
             return View();

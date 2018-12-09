@@ -161,8 +161,8 @@ namespace MitigatingCircumstances.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    CreatedById = table.Column<string>(nullable: true),
-                    AssignedToId = table.Column<string>(nullable: true),
+                    StudentCreatedById = table.Column<string>(nullable: true),
+                    TutorAssignedToId = table.Column<string>(nullable: true),
                     Title = table.Column<string>(nullable: true),
                     Message = table.Column<string>(nullable: true),
                     CreatedAt = table.Column<DateTime>(nullable: false),
@@ -172,14 +172,14 @@ namespace MitigatingCircumstances.Migrations
                 {
                     table.PrimaryKey("PK_SupportTickets", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_SupportTickets_AspNetUsers_AssignedToId",
-                        column: x => x.AssignedToId,
+                        name: "FK_SupportTickets_AspNetUsers_StudentCreatedById",
+                        column: x => x.StudentCreatedById,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_SupportTickets_AspNetUsers_CreatedById",
-                        column: x => x.CreatedById,
+                        name: "FK_SupportTickets_AspNetUsers_TutorAssignedToId",
+                        column: x => x.TutorAssignedToId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -209,6 +209,27 @@ namespace MitigatingCircumstances.Migrations
                         name: "FK_SupportTicketReplies_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UploadedDocument",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    UploadedBy = table.Column<string>(nullable: true),
+                    Url = table.Column<string>(nullable: true),
+                    SupportTicketId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UploadedDocument", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_UploadedDocument_SupportTickets_SupportTicketId",
+                        column: x => x.SupportTicketId,
+                        principalTable: "SupportTickets",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -263,14 +284,19 @@ namespace MitigatingCircumstances.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SupportTickets_AssignedToId",
+                name: "IX_SupportTickets_StudentCreatedById",
                 table: "SupportTickets",
-                column: "AssignedToId");
+                column: "StudentCreatedById");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SupportTickets_CreatedById",
+                name: "IX_SupportTickets_TutorAssignedToId",
                 table: "SupportTickets",
-                column: "CreatedById");
+                column: "TutorAssignedToId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UploadedDocument_SupportTicketId",
+                table: "UploadedDocument",
+                column: "SupportTicketId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -292,6 +318,9 @@ namespace MitigatingCircumstances.Migrations
 
             migrationBuilder.DropTable(
                 name: "SupportTicketReplies");
+
+            migrationBuilder.DropTable(
+                name: "UploadedDocument");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
