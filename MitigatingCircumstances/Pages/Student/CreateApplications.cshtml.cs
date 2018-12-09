@@ -12,6 +12,7 @@ using MitigatingCircumstances.Repositories.Base;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
+using System.Linq;
 
 namespace MitigatingCircumstances.Pages.Student
 {
@@ -78,7 +79,11 @@ namespace MitigatingCircumstances.Pages.Student
                     TutorAssignedTo = tutor
                 };
 
-                ticket.UploadedDocuments = UploadFiles(ticket, Input.Files);
+                if (Input.Files.Any())
+                {
+                    ticket.UploadedDocuments = UploadFiles(ticket, Input.Files);
+                }
+
                 _supportTicketRepository.SaveSupportTicket(ticket);
             }          
         }

@@ -4,7 +4,7 @@
     ViewData["Title"] = "CreateApplications";
 }
 
-<form method="post" asp-action="" enctype="multipart/form-data">
+<form method="post" enctype="multipart/form-data">
     <div class="form-group">
         <label asp-for="Input.Title"></label>
         <input asp-for="Input.Title" type="text" class="form-control">
@@ -31,8 +31,29 @@
         <span asp-validation-for="Input.Files" class="text-danger"></span>
     </div>
 
-    <button type="submit" class="btn btn-primary float-right">Submit</button>
+    <div class="form-group">
+        <input type="submit" class="btn btn-primary float-right" value="Submit"/>
+    </div>
 </form>
+
+@if (true)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong>Nice!</strong> Your support ticket has been created. Click here to view it {ticketId}.
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+}
+else
+{
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <strong>Holy guacamole!</strong> You should check in on some of those fields below.
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+}
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
