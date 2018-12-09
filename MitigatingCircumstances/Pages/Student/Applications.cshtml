@@ -1,4 +1,6 @@
-﻿@{
+﻿@page
+@model ApplicationsModel
+@{
     ViewData["Title"] = "Applications";
 }
 
@@ -35,4 +37,4 @@
     </tbody>
 </table>
 
-<a class="btn btn-primary float-right" asp-action="CreateApplication">Create new</a>
+<a class="btn btn-primary float-right" asp-page="./CreateApplications">Create new</a>

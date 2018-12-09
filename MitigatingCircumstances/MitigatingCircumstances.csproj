@@ -47,7 +47,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Update="Views\Student\CreateApplication.cshtml">
+    <Content Update="Pages\_ViewImports.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Pages\_ViewStart.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
   </ItemGroup>

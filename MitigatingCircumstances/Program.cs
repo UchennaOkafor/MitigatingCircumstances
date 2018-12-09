@@ -46,7 +46,13 @@ namespace MitigatingCircumstances
                 .ConfigureServices(services =>
                 {
                     // Add framework services.Microsoft.VisualStudio.ExtensionManager.ExtensionManagerService
-                    services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1); ;
+                    services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+                    //services.AddAuthorization(options =>
+                    //{
+                    //    options.AddPolicy("RequireStudentRole", policy => policy.RequireRole(Roles.Student));
+                    //    options.AddPolicy("RequireTutorRole", policy => policy.RequireRole(Roles.Tutor));
+                    //});
 
                     if (HasGcpProjectId)
                     {
