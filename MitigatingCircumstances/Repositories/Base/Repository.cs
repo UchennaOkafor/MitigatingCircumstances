@@ -1,6 +1,6 @@
 ﻿using Google.Cloud.Datastore.V1;
 
-namespace MitigatingCircumstances.Repositories
+namespace MitigatingCircumstances.Repositories.Base
 {
     public class Repository
     {

@@ -221,13 +221,13 @@ namespace MitigatingCircumstances.Migrations
 
                     b.Property<DateTime>("CreatedAt");
 
-                    b.Property<int?>("SupportTicketId");
+                    b.Property<int?>("TicketId");
 
                     b.Property<string>("UserId");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SupportTicketId");
+                    b.HasIndex("TicketId");
 
                     b.HasIndex("UserId");
 
@@ -240,15 +240,23 @@ namespace MitigatingCircumstances.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("SupportTicketId");
+                    b.Property<string>("Bucket");
+
+                    b.Property<string>("CloudId");
+
+                    b.Property<DateTime>("CreatedAt");
+
+                    b.Property<string>("MediaLink");
+
+                    b.Property<string>("Name");
+
+                    b.Property<int?>("TicketId");
 
                     b.Property<string>("UploadedById");
 
-                    b.Property<string>("Url");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("SupportTicketId");
+                    b.HasIndex("TicketId");
 
                     b.HasIndex("UploadedById");
 
@@ -313,9 +321,9 @@ namespace MitigatingCircumstances.Migrations
 
             modelBuilder.Entity("MitigatingCircumstances.Models.SupportTicketReply", b =>
                 {
-                    b.HasOne("MitigatingCircumstances.Models.SupportTicket", "SupportTicket")
+                    b.HasOne("MitigatingCircumstances.Models.SupportTicket", "Ticket")
                         .WithMany()
-                        .HasForeignKey("SupportTicketId");
+                        .HasForeignKey("TicketId");
 
                     b.HasOne("MitigatingCircumstances.Models.ApplicationUser", "User")
                         .WithMany()
@@ -324,9 +332,9 @@ namespace MitigatingCircumstances.Migrations
 
             modelBuilder.Entity("MitigatingCircumstances.Models.UploadedDocument", b =>
                 {
-                    b.HasOne("MitigatingCircumstances.Models.SupportTicket")
+                    b.HasOne("MitigatingCircumstances.Models.SupportTicket", "Ticket")
                         .WithMany("UploadedDocuments")
-                        .HasForeignKey("SupportTicketId");
+                        .HasForeignKey("TicketId");
 
                     b.HasOne("MitigatingCircumstances.Models.ApplicationUser", "UploadedBy")
                         .WithMany()

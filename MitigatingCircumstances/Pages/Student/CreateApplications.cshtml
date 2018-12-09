@@ -4,31 +4,36 @@
     ViewData["Title"] = "CreateApplications";
 }
 
-<form method="post" asp-action="">
+<form method="post" asp-action="" enctype="multipart/form-data">
     <div class="form-group">
-        <label for="exampleFormControlInput1">Title</label>
-        <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Placeholder">
-    </div>
-    <div class="form-group">
-        <label for="exampleFormControlTextarea1">Mitigating Circumstance</label>
-        <textarea class="form-control" id="exampleFormControlTextarea1" rows="4"></textarea>
+        <label asp-for="Input.Title"></label>
+        <input asp-for="Input.Title" type="text" class="form-control">
+        <span asp-validation-for="Input.Title" class="text-danger"></span>
     </div>
 
     <div class="form-group">
-        <label for="exampleFormControlSelect1">Assigned tutor</label>
-        <select class="form-control col-4" id="exampleFormControlSelect1">
-            <option>Tutor 1</option>
-            <option>Tutor 2</option>
-            <option>Tutor 3</option>
-            <option>Tutor 4</option>
-            <option>Tutor 5</option>
+        <label asp-for="Input.Message"></label>
+        <textarea class="form-control" asp-for="Input.Message" rows="4"></textarea>
+        <span asp-validation-for="Input.Message" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Input.ChosenTutor"></label>
+        <select asp-for="Input.ChosenTutor" asp-items="@Model.AvailableTutors" class="form-control col-4">
+            <option value="">Select a tutor</option>
         </select>
+        <span asp-validation-for="Input.ChosenTutor" class="text-danger"></span>
     </div>
 
     <div class="form-group">
-        <label for="exampleFormControlFile1">Supporting evidence</label>
-        <input type="file" class="form-control-file" id="exampleFormControlFile1" multiple>
+        <label asp-for="Input.Files"></label>
+        <input asp-for="Input.Files" type="file" class="form-control-file" multiple>
+        <span asp-validation-for="Input.Files" class="text-danger"></span>
     </div>
 
     <button type="submit" class="btn btn-primary float-right">Submit</button>
 </form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

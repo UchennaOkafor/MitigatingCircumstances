@@ -1,6 +1,6 @@
-﻿using MitigatingCircumstances.Models.Enum;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using MitigatingCircumstances.Models.Enum;
 
 namespace MitigatingCircumstances.Models
 {

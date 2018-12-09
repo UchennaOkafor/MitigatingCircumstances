@@ -14,7 +14,7 @@
             @if (User.IsInRole(Roles.Tutor))
             {
                 <li class="nav-item">
-                    <a class="nav-link" asp-action="Applications" asp-controller="Tutor">
+                    <a class="nav-link" asp-page="/Tutor/Applications">
                         Student applications
                     </a>
                 </li>
@@ -22,7 +22,7 @@
             else if (User.IsInRole(Roles.Student))
             {
                 <li class="nav-item">
-                    <a class="nav-link" asp-action="Applications" asp-controller="Student">My applications</a>
+                    <a class="nav-link" asp-page="/Student/Applications">My applications</a>
                 </li>
             }
         </ul>

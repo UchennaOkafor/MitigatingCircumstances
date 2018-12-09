@@ -7,8 +7,8 @@ namespace MitigatingCircumstances.Models.Enum
 {
     public enum TicketStatus
     {
-        Open,
-        Resolved,
-        Closed
+        Open = 0,
+        Resolved = 1,
+        Closed = 2
     }
 }

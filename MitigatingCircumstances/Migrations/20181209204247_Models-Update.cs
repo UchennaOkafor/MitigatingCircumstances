@@ -191,7 +191,7 @@ namespace MitigatingCircumstances.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    SupportTicketId = table.Column<int>(nullable: true),
+                    TicketId = table.Column<int>(nullable: true),
                     UserId = table.Column<string>(nullable: true),
                     Comment = table.Column<string>(nullable: true),
                     CreatedAt = table.Column<DateTime>(nullable: false)
@@ -200,8 +200,8 @@ namespace MitigatingCircumstances.Migrations
                 {
                     table.PrimaryKey("PK_SupportTicketReplies", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_SupportTicketReplies_SupportTickets_SupportTicketId",
-                        column: x => x.SupportTicketId,
+                        name: "FK_SupportTicketReplies_SupportTickets_TicketId",
+                        column: x => x.TicketId,
                         principalTable: "SupportTickets",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -214,22 +214,32 @@ namespace MitigatingCircumstances.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "UploadedDocument",
+                name: "UploadedDocuments",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    UploadedBy = table.Column<string>(nullable: true),
-                    Url = table.Column<string>(nullable: true),
-                    SupportTicketId = table.Column<int>(nullable: true)
+                    CloudId = table.Column<string>(nullable: true),
+                    TicketId = table.Column<int>(nullable: true),
+                    UploadedById = table.Column<string>(nullable: true),
+                    MediaLink = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(nullable: true),
+                    Bucket = table.Column<string>(nullable: true),
+                    CreatedAt = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UploadedDocument", x => x.Id);
+                    table.PrimaryKey("PK_UploadedDocuments", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_UploadedDocument_SupportTickets_SupportTicketId",
-                        column: x => x.SupportTicketId,
+                        name: "FK_UploadedDocuments_SupportTickets_TicketId",
+                        column: x => x.TicketId,
                         principalTable: "SupportTickets",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_UploadedDocuments_AspNetUsers_UploadedById",
+                        column: x => x.UploadedById,
+                        principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -274,9 +284,9 @@ namespace MitigatingCircumstances.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SupportTicketReplies_SupportTicketId",
+                name: "IX_SupportTicketReplies_TicketId",
                 table: "SupportTicketReplies",
-                column: "SupportTicketId");
+                column: "TicketId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_SupportTicketReplies_UserId",
@@ -294,9 +304,14 @@ namespace MitigatingCircumstances.Migrations
                 column: "TutorAssignedToId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UploadedDocument_SupportTicketId",
-                table: "UploadedDocument",
-                column: "SupportTicketId");
+                name: "IX_UploadedDocuments_TicketId",
+                table: "UploadedDocuments",
+                column: "TicketId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UploadedDocuments_UploadedById",
+                table: "UploadedDocuments",
+                column: "UploadedById");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -320,7 +335,7 @@ namespace MitigatingCircumstances.Migrations
                 name: "SupportTicketReplies");
 
             migrationBuilder.DropTable(
-                name: "UploadedDocument");
+                name: "UploadedDocuments");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
