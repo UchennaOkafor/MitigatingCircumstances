@@ -1,5 +1,4 @@
-﻿using Google.Cloud.Storage.V1;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -9,9 +8,9 @@ using MitigatingCircumstances.Models;
 using MitigatingCircumstances.Models.Enum;
 using MitigatingCircumstances.Models.Static;
 using MitigatingCircumstances.Repositories.Base;
+using MitigatingCircumstances.Services.Interface;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.IO;
 using System.Linq;
 
 namespace MitigatingCircumstances.Pages.Student
@@ -43,11 +42,13 @@ namespace MitigatingCircumstances.Pages.Student
 
         private readonly ISupportTicketRepository _supportTicketRepository;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly ICloudStorageService _cloudStorageService;
 
         public CreateApplicationsModel(ISupportTicketRepository supportTicketRepository, 
-            UserManager<ApplicationUser> userManager)
+            UserManager<ApplicationUser> userManager, ICloudStorageService cloudStorageService)
         {
             _supportTicketRepository = supportTicketRepository;
+            _cloudStorageService = cloudStorageService;
             _userManager = userManager;
 
             AvailableTutors = new List<SelectListItem>()
@@ -70,7 +71,7 @@ namespace MitigatingCircumstances.Pages.Student
                 var student = _userManager.GetUserAsync(User).Result;
                 var tutor = student;
 
-                var ticket = new SupportTicket()
+                var ticket = new SupportTicket
                 {
                     Title = Input.Title,
                     Message = Input.Message,
@@ -79,7 +80,7 @@ namespace MitigatingCircumstances.Pages.Student
                     TutorAssignedTo = tutor
                 };
 
-                if (Input.Files.Any())
+                if (Input.Files != null && Input.Files.Any())
                 {
                     ticket.UploadedDocuments = UploadFiles(ticket, Input.Files);
                 }
@@ -90,30 +91,23 @@ namespace MitigatingCircumstances.Pages.Student
 
         public List<UploadedDocument> UploadFiles(SupportTicket ticket, List<IFormFile> formFiles)
         {
-            var storage = StorageClient.Create();
             var uploadedDocuments = new List<UploadedDocument>();
-
-            var filePath = Path.GetTempFileName();
 
             foreach (var formFile in formFiles)
             {
                 if (formFile.Length > 0)
                 {
-                    using (var stream = new FileStream(filePath, FileMode.Create))
-                    {
-                        formFile.CopyTo(stream);
-                        var response = storage.UploadObject("future-system-219911.appspot.com", formFile.FileName, formFile.ContentType, stream);
+                    var response = _cloudStorageService.UploadFormFile(formFile);
 
-                        uploadedDocuments.Add(new UploadedDocument
-                        {
-                            CloudId = response.Id,
-                            Bucket = response.Bucket,
-                            MediaLink = response.MediaLink,
-                            Name = formFile.FileName,
-                            Ticket = ticket,
-                            UploadedBy = ticket.StudentCreatedBy
-                        });
-                    }
+                    uploadedDocuments.Add(new UploadedDocument
+                    {
+                        CloudId = response.Id,
+                        Bucket = response.Bucket,
+                        MediaLink = response.MediaLink,
+                        Name = formFile.FileName,
+                        Ticket = ticket,
+                        UploadedBy = ticket.StudentCreatedBy
+                    });
                 }
             }
 

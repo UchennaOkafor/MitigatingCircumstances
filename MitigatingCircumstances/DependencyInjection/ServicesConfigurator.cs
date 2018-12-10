@@ -3,6 +3,8 @@ using Microsoft.Extensions.DependencyInjection;
 using MitigatingCircumstances.Repositories;
 using MitigatingCircumstances.Repositories.Base;
 using MitigatingCircumstances.Repositories.Interface;
+using MitigatingCircumstances.Services;
+using MitigatingCircumstances.Services.Interface;
 
 namespace MitigatingCircumstances.DependencyInjection
 {
@@ -14,6 +16,7 @@ namespace MitigatingCircumstances.DependencyInjection
             services.AddTransient<ITicketRepository, StudentTicketRepository>();
             services.AddTransient<IBaseRepository, BaseRepository>();
             services.AddTransient<ISupportTicketRepository, SupportTicketRepository>();
+            services.AddTransient<ICloudStorageService, GoogleCloudStorageService>();
         }
     }
 }

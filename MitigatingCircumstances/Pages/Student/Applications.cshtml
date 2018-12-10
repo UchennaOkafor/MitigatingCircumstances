@@ -34,6 +34,29 @@
                 </button>
             </td>
         </tr>
+
+        @foreach (var ticket in Model.Tickets)
+        {
+            <tr>
+                <td>@ticket.Title</td>
+                <td>@ticket.Message</td>
+                <td>@ticket.TutorAssignedTo.Firstname @ticket.TutorAssignedTo.Lastname</td>
+                <td>
+                    <span class="badge badge-info">Open</span>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-info btn-sm">
+                        Open
+                    </button>
+                    <button type="button" class="btn btn-info btn-sm">
+                        <i class="far fa-edit"></i>
+                    </button>
+                    <button type="button" class="btn btn-danger btn-sm">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
 
