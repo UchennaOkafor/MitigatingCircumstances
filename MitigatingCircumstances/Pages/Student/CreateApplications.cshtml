@@ -12,9 +12,9 @@
     </div>
 
     <div class="form-group">
-        <label asp-for="Input.Message"></label>
-        <textarea class="form-control" asp-for="Input.Message" rows="4"></textarea>
-        <span asp-validation-for="Input.Message" class="text-danger"></span>
+        <label asp-for="Input.Description"></label>
+        <textarea class="form-control" asp-for="Input.Description" rows="4"></textarea>
+        <span asp-validation-for="Input.Description" class="text-danger"></span>
     </div>
 
     <div class="form-group">
@@ -26,9 +26,9 @@
     </div>
 
     <div class="form-group">
-        <label asp-for="Input.Files"></label>
-        <input asp-for="Input.Files" type="file" class="form-control-file" multiple>
-        <span asp-validation-for="Input.Files" class="text-danger"></span>
+        <label asp-for="Input.UploadedFiles"></label>
+        <input asp-for="Input.UploadedFiles" type="file" class="form-control-file" multiple>
+        <span asp-validation-for="Input.UploadedFiles" class="text-danger"></span>
     </div>
 
     <div class="form-group">
@@ -38,12 +38,12 @@
 
 @if (true)
 {
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-        <strong>Nice!</strong> Your support ticket has been created. Click here to view it {ticketId}.
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
+<div class="alert alert-success alert-dismissible fade show" role="alert">
+    <strong>Nice!</strong> Your extension request has been created. Click here to view it {extensionRequestId}.
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
 }
 else
 {

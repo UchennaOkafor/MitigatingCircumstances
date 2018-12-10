@@ -2,11 +2,11 @@
 
 namespace MitigatingCircumstances.Models
 {
-    public class SupportTicketReply
+    public class ExtensionRequestReply
     {
         public int Id { get; set; }
 
-        public virtual SupportTicket Ticket { get; set; }
+        public virtual ExtensionRequest ExtensionRequest { get; set; }
 
         public virtual ApplicationUser User { get; set; }
 

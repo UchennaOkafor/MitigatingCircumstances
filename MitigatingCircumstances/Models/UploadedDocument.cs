@@ -8,7 +8,7 @@ namespace MitigatingCircumstances.Models
 
         public string CloudId { get; set; }
 
-        public virtual SupportTicket Ticket { get; set; }
+        public virtual ExtensionRequest ExtensionRequest { get; set; }
 
         public virtual ApplicationUser UploadedBy { get; set; }
 

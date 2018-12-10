@@ -156,7 +156,7 @@ namespace MitigatingCircumstances.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "SupportTickets",
+                name: "ExtensionRequests",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -164,21 +164,21 @@ namespace MitigatingCircumstances.Migrations
                     StudentCreatedById = table.Column<string>(nullable: true),
                     TutorAssignedToId = table.Column<string>(nullable: true),
                     Title = table.Column<string>(nullable: true),
-                    Message = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(nullable: true),
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     Status = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SupportTickets", x => x.Id);
+                    table.PrimaryKey("PK_ExtensionRequests", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_SupportTickets_AspNetUsers_StudentCreatedById",
+                        name: "FK_ExtensionRequests_AspNetUsers_StudentCreatedById",
                         column: x => x.StudentCreatedById,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_SupportTickets_AspNetUsers_TutorAssignedToId",
+                        name: "FK_ExtensionRequests_AspNetUsers_TutorAssignedToId",
                         column: x => x.TutorAssignedToId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
@@ -186,27 +186,27 @@ namespace MitigatingCircumstances.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "SupportTicketReplies",
+                name: "ExtensionRequestReplies",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    TicketId = table.Column<int>(nullable: true),
+                    ExtensionRequestId = table.Column<int>(nullable: true),
                     UserId = table.Column<string>(nullable: true),
                     Comment = table.Column<string>(nullable: true),
                     CreatedAt = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SupportTicketReplies", x => x.Id);
+                    table.PrimaryKey("PK_ExtensionRequestReplies", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_SupportTicketReplies_SupportTickets_TicketId",
-                        column: x => x.TicketId,
-                        principalTable: "SupportTickets",
+                        name: "FK_ExtensionRequestReplies_ExtensionRequests_ExtensionRequestId",
+                        column: x => x.ExtensionRequestId,
+                        principalTable: "ExtensionRequests",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_SupportTicketReplies_AspNetUsers_UserId",
+                        name: "FK_ExtensionRequestReplies_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
@@ -220,7 +220,7 @@ namespace MitigatingCircumstances.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     CloudId = table.Column<string>(nullable: true),
-                    TicketId = table.Column<int>(nullable: true),
+                    ExtensionRequestId = table.Column<int>(nullable: true),
                     UploadedById = table.Column<string>(nullable: true),
                     MediaLink = table.Column<string>(nullable: true),
                     Name = table.Column<string>(nullable: true),
@@ -231,9 +231,9 @@ namespace MitigatingCircumstances.Migrations
                 {
                     table.PrimaryKey("PK_UploadedDocuments", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_UploadedDocuments_SupportTickets_TicketId",
-                        column: x => x.TicketId,
-                        principalTable: "SupportTickets",
+                        name: "FK_UploadedDocuments_ExtensionRequests_ExtensionRequestId",
+                        column: x => x.ExtensionRequestId,
+                        principalTable: "ExtensionRequests",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
@@ -284,29 +284,29 @@ namespace MitigatingCircumstances.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SupportTicketReplies_TicketId",
-                table: "SupportTicketReplies",
-                column: "TicketId");
+                name: "IX_ExtensionRequestReplies_ExtensionRequestId",
+                table: "ExtensionRequestReplies",
+                column: "ExtensionRequestId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SupportTicketReplies_UserId",
-                table: "SupportTicketReplies",
+                name: "IX_ExtensionRequestReplies_UserId",
+                table: "ExtensionRequestReplies",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SupportTickets_StudentCreatedById",
-                table: "SupportTickets",
+                name: "IX_ExtensionRequests_StudentCreatedById",
+                table: "ExtensionRequests",
                 column: "StudentCreatedById");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SupportTickets_TutorAssignedToId",
-                table: "SupportTickets",
+                name: "IX_ExtensionRequests_TutorAssignedToId",
+                table: "ExtensionRequests",
                 column: "TutorAssignedToId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UploadedDocuments_TicketId",
+                name: "IX_UploadedDocuments_ExtensionRequestId",
                 table: "UploadedDocuments",
-                column: "TicketId");
+                column: "ExtensionRequestId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UploadedDocuments_UploadedById",
@@ -332,7 +332,7 @@ namespace MitigatingCircumstances.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "SupportTicketReplies");
+                name: "ExtensionRequestReplies");
 
             migrationBuilder.DropTable(
                 name: "UploadedDocuments");
@@ -341,7 +341,7 @@ namespace MitigatingCircumstances.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "SupportTickets");
+                name: "ExtensionRequests");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

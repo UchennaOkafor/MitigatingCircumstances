@@ -8,6 +8,8 @@ namespace MitigatingCircumstances.Models
 
         public string Lastname { get; set; }
 
+        public string Fullname => $"{Firstname} {Lastname}";
+
         public bool IsTutor => false;
 
         public bool IsStudent => false;

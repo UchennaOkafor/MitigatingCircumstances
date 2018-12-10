@@ -13,9 +13,9 @@ namespace MitigatingCircumstances.Models
         {
         }
 
-        public DbSet<SupportTicket> SupportTickets { get; set; }
+        public DbSet<ExtensionRequest> ExtensionRequests { get; set; }
 
-        public DbSet<SupportTicketReply> SupportTicketReplies { get; set; }
+        public DbSet<ExtensionRequestReply> ExtensionRequestReplies { get; set; }
 
         public DbSet<UploadedDocument> UploadedDocuments { get; set; }
 

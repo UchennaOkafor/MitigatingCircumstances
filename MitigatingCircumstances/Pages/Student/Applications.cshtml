@@ -35,12 +35,12 @@
             </td>
         </tr>
 
-        @foreach (var ticket in Model.Tickets)
+        @foreach (var extensionRequest in Model.ExtensionRequests)
         {
             <tr>
-                <td>@ticket.Title</td>
-                <td>@ticket.Message</td>
-                <td>@ticket.TutorAssignedTo.Firstname @ticket.TutorAssignedTo.Lastname</td>
+                <td>@extensionRequest.Title</td>
+                <td>@extensionRequest.Description</td>
+                <td>@extensionRequest.TutorAssignedTo.Fullname</td>
                 <td>
                     <span class="badge badge-info">Open</span>
                 </td>

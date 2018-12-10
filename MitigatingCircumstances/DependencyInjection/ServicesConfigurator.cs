@@ -13,9 +13,8 @@ namespace MitigatingCircumstances.DependencyInjection
         public static void AddServicesDependencies(this IServiceCollection services, string projectId)
         {
             services.AddSingleton(DatastoreDb.Create(projectId));
-            services.AddTransient<ITicketRepository, StudentTicketRepository>();
             services.AddTransient<IBaseRepository, BaseRepository>();
-            services.AddTransient<ISupportTicketRepository, SupportTicketRepository>();
+            services.AddTransient<IExtensionRequestRepository, ExtensionRequestRepository>();
             services.AddTransient<ICloudStorageService, GoogleCloudStorageService>();
         }
     }

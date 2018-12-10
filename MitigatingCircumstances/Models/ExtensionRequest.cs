@@ -4,7 +4,7 @@ using MitigatingCircumstances.Models.Enum;
 
 namespace MitigatingCircumstances.Models
 {
-    public class SupportTicket
+    public class ExtensionRequest
     {
         public int Id { get; set; }
 
@@ -14,12 +14,12 @@ namespace MitigatingCircumstances.Models
 
         public string Title { get; set; }
 
-        public string Message { get; set; }
+        public string Description { get; set; }
 
         public virtual ICollection<UploadedDocument> UploadedDocuments { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow.ToLocalTime();
 
-        public virtual TicketStatus? Status { get; set; }
+        public virtual ExtensionRequestStatus? Status { get; set; }
     }
 }

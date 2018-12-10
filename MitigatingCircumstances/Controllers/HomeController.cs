@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using MitigatingCircumstances.Repositories;
 
 namespace MitigatingCircumstances.Controllers
 {
@@ -9,12 +8,10 @@ namespace MitigatingCircumstances.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger _logger;
-        private readonly ITicketRepository _requestRepository;
 
-        public HomeController(ILogger<HomeController> logger, ITicketRepository requestRepository)
+        public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
-            _requestRepository = requestRepository;
         }
 
         public IActionResult Index()
@@ -23,16 +20,6 @@ namespace MitigatingCircumstances.Controllers
             // The Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker logger will log all controller actions with
             // log level information. This log is for additional information.
             _logger.LogInformation("Home page hit!");
-
-            if (true)
-            {
-                var r = true;
-            }
-
-            //_requestRepository.CreateMitigatingRequest();
-            //var entity = _requestRepository.GetStudentRequest();
-            //var log = _requestRepository.GetLog(entity["student"].KeyValue);
-
             return View();
         }
     }

@@ -3,13 +3,13 @@ using System;
 
 namespace MitigatingCircumstances.Repositories
 {
-    public class StudentTicketRepository : ITicketRepository
+    public class GoogleEntityTestRepository
     {
-        private const string Kind = "Ticket";
+        private const string Kind = "Notification";
         private readonly KeyFactory _keyFactory;
         private readonly DatastoreDb _db;
 
-        public StudentTicketRepository(DatastoreDb db)
+        public GoogleEntityTestRepository(DatastoreDb db)
         {
             _db = db;
             _keyFactory = db.CreateKeyFactory(Kind);

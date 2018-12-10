@@ -12,6 +12,7 @@ using MitigatingCircumstances.Services.Interface;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace MitigatingCircumstances.Pages.Student
 {
@@ -26,28 +27,29 @@ namespace MitigatingCircumstances.Pages.Student
         public class InputModel
         {
             [Required]
+            [Display(Prompt = "The title of your extraneous circumstance")]
             public string Title { get; set; }
 
             [Required]
-            [Display(Name = "Mitigating Circumstances")]
-            public string Message { get; set; }
+            [Display(Prompt = "A concise description of your extraneous circumstance")]
+            public string Description { get; set; }
 
             [Display(Name = "Supporting Documents")]
-            public List<IFormFile> Files { get; set; }
+            public List<IFormFile> UploadedFiles { get; set; }
 
             [Required]
             [Display(Name = "Assigned Tutor")]
             public string ChosenTutor { get; set; }
         }
 
-        private readonly ISupportTicketRepository _supportTicketRepository;
+        private readonly IExtensionRequestRepository _extensionRequestRepository;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ICloudStorageService _cloudStorageService;
 
-        public CreateApplicationsModel(ISupportTicketRepository supportTicketRepository, 
+        public CreateApplicationsModel(IExtensionRequestRepository extensionRequestRepository, 
             UserManager<ApplicationUser> userManager, ICloudStorageService cloudStorageService)
         {
-            _supportTicketRepository = supportTicketRepository;
+            _extensionRequestRepository = extensionRequestRepository;
             _cloudStorageService = cloudStorageService;
             _userManager = userManager;
 
@@ -59,37 +61,34 @@ namespace MitigatingCircumstances.Pages.Student
             };
         }
 
-        public void OnGet()
-        {
-
-        }
-
-        public void OnPost()
+        public async Task<IActionResult> OnPostAsync()
         {
             if (ModelState.IsValid)
             {
-                var student = _userManager.GetUserAsync(User).Result;
+                var student = await _userManager.GetUserAsync(User);
                 var tutor = student;
 
-                var ticket = new SupportTicket
+                var extensionRequest = new ExtensionRequest
                 {
                     Title = Input.Title,
-                    Message = Input.Message,
-                    Status = TicketStatus.Open,
+                    Description = Input.Description,
+                    Status = ExtensionRequestStatus.Open,
                     StudentCreatedBy = student,
                     TutorAssignedTo = tutor
                 };
 
-                if (Input.Files != null && Input.Files.Any())
+                if (Input.UploadedFiles != null && Input.UploadedFiles.Any())
                 {
-                    ticket.UploadedDocuments = UploadFiles(ticket, Input.Files);
+                    extensionRequest.UploadedDocuments = UploadFiles(extensionRequest, Input.UploadedFiles);
                 }
 
-                _supportTicketRepository.SaveSupportTicket(ticket);
-            }          
+                _extensionRequestRepository.SaveExtensionRequest(extensionRequest);
+            }
+
+            return Page();
         }
 
-        public List<UploadedDocument> UploadFiles(SupportTicket ticket, List<IFormFile> formFiles)
+        public List<UploadedDocument> UploadFiles(ExtensionRequest extensionRequest, List<IFormFile> formFiles)
         {
             var uploadedDocuments = new List<UploadedDocument>();
 
@@ -105,8 +104,8 @@ namespace MitigatingCircumstances.Pages.Student
                         Bucket = response.Bucket,
                         MediaLink = response.MediaLink,
                         Name = formFile.FileName,
-                        Ticket = ticket,
-                        UploadedBy = ticket.StudentCreatedBy
+                        ExtensionRequest = extensionRequest,
+                        UploadedBy = extensionRequest.StudentCreatedBy
                     });
                 }
             }

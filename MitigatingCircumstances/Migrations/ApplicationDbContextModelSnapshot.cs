@@ -184,7 +184,7 @@ namespace MitigatingCircumstances.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("MitigatingCircumstances.Models.SupportTicket", b =>
+            modelBuilder.Entity("MitigatingCircumstances.Models.ExtensionRequest", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -192,7 +192,7 @@ namespace MitigatingCircumstances.Migrations
 
                     b.Property<DateTime>("CreatedAt");
 
-                    b.Property<string>("Message");
+                    b.Property<string>("Description");
 
                     b.Property<int?>("Status");
 
@@ -208,10 +208,10 @@ namespace MitigatingCircumstances.Migrations
 
                     b.HasIndex("TutorAssignedToId");
 
-                    b.ToTable("SupportTickets");
+                    b.ToTable("ExtensionRequests");
                 });
 
-            modelBuilder.Entity("MitigatingCircumstances.Models.SupportTicketReply", b =>
+            modelBuilder.Entity("MitigatingCircumstances.Models.ExtensionRequestReply", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -221,17 +221,17 @@ namespace MitigatingCircumstances.Migrations
 
                     b.Property<DateTime>("CreatedAt");
 
-                    b.Property<int?>("TicketId");
+                    b.Property<int?>("ExtensionRequestId");
 
                     b.Property<string>("UserId");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("TicketId");
+                    b.HasIndex("ExtensionRequestId");
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("SupportTicketReplies");
+                    b.ToTable("ExtensionRequestReplies");
                 });
 
             modelBuilder.Entity("MitigatingCircumstances.Models.UploadedDocument", b =>
@@ -246,17 +246,17 @@ namespace MitigatingCircumstances.Migrations
 
                     b.Property<DateTime>("CreatedAt");
 
+                    b.Property<int?>("ExtensionRequestId");
+
                     b.Property<string>("MediaLink");
 
                     b.Property<string>("Name");
-
-                    b.Property<int?>("TicketId");
 
                     b.Property<string>("UploadedById");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("TicketId");
+                    b.HasIndex("ExtensionRequestId");
 
                     b.HasIndex("UploadedById");
 
@@ -308,7 +308,7 @@ namespace MitigatingCircumstances.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("MitigatingCircumstances.Models.SupportTicket", b =>
+            modelBuilder.Entity("MitigatingCircumstances.Models.ExtensionRequest", b =>
                 {
                     b.HasOne("MitigatingCircumstances.Models.ApplicationUser", "StudentCreatedBy")
                         .WithMany()
@@ -319,11 +319,11 @@ namespace MitigatingCircumstances.Migrations
                         .HasForeignKey("TutorAssignedToId");
                 });
 
-            modelBuilder.Entity("MitigatingCircumstances.Models.SupportTicketReply", b =>
+            modelBuilder.Entity("MitigatingCircumstances.Models.ExtensionRequestReply", b =>
                 {
-                    b.HasOne("MitigatingCircumstances.Models.SupportTicket", "Ticket")
+                    b.HasOne("MitigatingCircumstances.Models.ExtensionRequest", "ExtensionRequest")
                         .WithMany()
-                        .HasForeignKey("TicketId");
+                        .HasForeignKey("ExtensionRequestId");
 
                     b.HasOne("MitigatingCircumstances.Models.ApplicationUser", "User")
                         .WithMany()
@@ -332,9 +332,9 @@ namespace MitigatingCircumstances.Migrations
 
             modelBuilder.Entity("MitigatingCircumstances.Models.UploadedDocument", b =>
                 {
-                    b.HasOne("MitigatingCircumstances.Models.SupportTicket", "Ticket")
+                    b.HasOne("MitigatingCircumstances.Models.ExtensionRequest", "ExtensionRequest")
                         .WithMany("UploadedDocuments")
-                        .HasForeignKey("TicketId");
+                        .HasForeignKey("ExtensionRequestId");
 
                     b.HasOne("MitigatingCircumstances.Models.ApplicationUser", "UploadedBy")
                         .WithMany()
