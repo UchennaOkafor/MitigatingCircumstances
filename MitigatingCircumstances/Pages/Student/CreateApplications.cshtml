@@ -18,11 +18,11 @@
     </div>
 
     <div class="form-group">
-        <label asp-for="Input.ChosenTutor"></label>
-        <select asp-for="Input.ChosenTutor" asp-items="@Model.AvailableTutors" class="form-control col-4">
+        <label asp-for="Input.ChosenTutorId"></label>
+        <select asp-for="Input.ChosenTutorId" asp-items="@Model.AvailableTutors" class="form-control col-4">
             <option value="">Select a tutor</option>
         </select>
-        <span asp-validation-for="Input.ChosenTutor" class="text-danger"></span>
+        <span asp-validation-for="Input.ChosenTutorId" class="text-danger"></span>
     </div>
 
     <div class="form-group">

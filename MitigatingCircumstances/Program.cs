@@ -11,9 +11,7 @@ using System.IO;
 using MitigatingCircumstances.DependencyInjection;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.HttpOverrides;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
-using MitigatingCircumstances.Models.Static;
+using MitigatingCircumstances.Seeder;
 
 namespace MitigatingCircumstances
 {
@@ -140,9 +138,9 @@ namespace MitigatingCircumstances
                             template: "{controller=Home}/{action=Index}/{id?}");
                     });
 
-                    CreateRoles(app.ApplicationServices).Wait();
-                })
-                .Build();
+                    UserSeeder.Initialize(app.ApplicationServices);
+
+                }).Build();
 
             host.Run();
         }
@@ -212,21 +210,6 @@ namespace MitigatingCircumstances
                     "service version id, then recompile.");
             }
             return versionId;
-        }
-
-        private static async Task CreateRoles(IServiceProvider serviceProvider)
-        {
-            var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-            var roles = new [] { Roles.Tutor, Roles.Student };
-
-            foreach (var role in roles)
-            {
-                var roleExist = await roleManager.RoleExistsAsync(role);
-                if (!roleExist)
-                {
-                    await roleManager.CreateAsync(new IdentityRole(role));
-                }
-            }
         }
     }
 }

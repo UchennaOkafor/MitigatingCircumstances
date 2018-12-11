@@ -39,7 +39,7 @@ namespace MitigatingCircumstances.Pages.Student
 
             [Required]
             [Display(Name = "Assigned Tutor")]
-            public string ChosenTutor { get; set; }
+            public string ChosenTutorId { get; set; }
         }
 
         private readonly IExtensionRequestRepository _extensionRequestRepository;
@@ -53,12 +53,9 @@ namespace MitigatingCircumstances.Pages.Student
             _cloudStorageService = cloudStorageService;
             _userManager = userManager;
 
-            AvailableTutors = new List<SelectListItem>()
-            {
-                new SelectListItem { Value = "Gernot", Text = "Gernot Libechen" },
-                new SelectListItem { Value = "Paul", Text = "Paul De Vrieze" },
-                new SelectListItem { Value = "Tim", Text = "Tim Orman" }
-            };
+            var tutors = _userManager.GetUsersInRoleAsync(Roles.Tutor).Result;
+
+            AvailableTutors = tutors.Select(t => new SelectListItem { Value = t.Id, Text = t.Fullname }).ToList();
         }
 
         public async Task<IActionResult> OnPostAsync()
@@ -66,7 +63,7 @@ namespace MitigatingCircumstances.Pages.Student
             if (ModelState.IsValid)
             {
                 var student = await _userManager.GetUserAsync(User);
-                var tutor = student;
+                var tutor = await _userManager.FindByIdAsync(Input.ChosenTutorId);
 
                 var extensionRequest = new ExtensionRequest
                 {

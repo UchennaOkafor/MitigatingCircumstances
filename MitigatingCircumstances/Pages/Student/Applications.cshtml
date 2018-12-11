@@ -4,6 +4,11 @@
     ViewData["Title"] = "Applications";
 }
 
+@if (! Model.ExtensionRequests.Any())
+{
+    <p>Empty</p>
+}
+
 <table class="table table-bordered">
     <thead>
         <tr>
