@@ -1,4 +1,5 @@
-﻿using MitigatingCircumstances.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using MitigatingCircumstances.Models;
 using MitigatingCircumstances.Repositories.Base;
 using System.Collections.Generic;
 using System.Linq;

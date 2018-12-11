@@ -15,6 +15,8 @@ namespace MitigatingCircumstances.Areas.Identity
             builder.ConfigureServices((context, services) => {
                 services.AddDbContext<ApplicationDbContext>(options =>
                 {
+                    options.UseLazyLoadingProxies();
+
                     if (context.HostingEnvironment.IsProduction() ||context.HostingEnvironment.IsStaging())
                     {
                         options.UseMySql(context.Configuration.GetConnectionString("GoogleCloudMySql"));
