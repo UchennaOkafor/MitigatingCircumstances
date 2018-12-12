@@ -1,13 +1,15 @@
 ﻿@using MitigatingCircumstances.Models
+@using MitigatingCircumstances.Models.Static
 @using Microsoft.AspNetCore.Identity
 
 @inject UserManager<ApplicationUser> UserManager
 
 @{
     ViewData["Title"] = "Home";
-    var appUser = await UserManager.GetUserAsync(User);
-    var roles = await UserManager.GetRolesAsync(appUser);
-    var role = roles.FirstOrDefault();
+    var role = User.IsInRole(Roles.Tutor) ? Roles.Tutor 
+        : User.IsInRole(Roles.Student) ? Roles.Student : string.Empty;
+
+    var aspPage = $"/{role}/Applications";
 }
 
 <div class="jumbotron">
@@ -15,5 +17,5 @@
     <p class="lead">Welcome, to our online student wellbeing portal. Use this portal to submit and track your mitigating circumstance forms.</p>
     <hr class="my-4">
     <p>You're currently logged in as a <strong>@role</strong></p>
-    <a class="btn btn-primary btn-lg" href="#" role="button">Get started</a>
+    <a class="btn btn-primary btn-lg" asp-page="@aspPage" role="button">Get started</a>
 </div>
