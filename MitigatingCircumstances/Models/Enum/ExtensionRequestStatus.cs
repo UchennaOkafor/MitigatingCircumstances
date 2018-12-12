@@ -3,7 +3,8 @@
     public enum ExtensionRequestStatus
     {
         Open = 0,
-        Resolved = 1,
-        Closed = 2
+        Approved = 1,
+        Rejected = 2,
+        Closed = 3
     }
 }
