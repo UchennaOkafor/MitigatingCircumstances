@@ -1,6 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using MitigatingCircumstances.Services.Interface;
+using SendGrid;
+using SendGrid.Helpers.Mail;
 
 namespace MitigatingCircumstances.Controllers
 {
@@ -9,9 +13,10 @@ namespace MitigatingCircumstances.Controllers
     {
         private readonly ILogger _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IMailService mailService)
         {
             _logger = logger;
+            mailService.SendEmail("", "");
         }
 
         public IActionResult Index()
@@ -20,6 +25,7 @@ namespace MitigatingCircumstances.Controllers
             // The Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker logger will log all controller actions with
             // log level information. This log is for additional information.
             _logger.LogInformation("Home page hit!");
+
             return View();
         }
     }

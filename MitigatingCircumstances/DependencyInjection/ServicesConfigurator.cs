@@ -16,6 +16,7 @@ namespace MitigatingCircumstances.DependencyInjection
             services.AddTransient<IBaseRepository, BaseRepository>();
             services.AddTransient<IExtensionRequestRepository, ExtensionRequestRepository>();
             services.AddTransient<ICloudStorageService, GoogleCloudStorageService>();
+            services.AddTransient<IMailService, SendGridMailService>();
         }
     }
 }
