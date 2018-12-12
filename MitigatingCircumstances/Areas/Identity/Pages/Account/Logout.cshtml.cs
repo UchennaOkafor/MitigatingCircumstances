@@ -8,7 +8,7 @@ using MitigatingCircumstances.Models;
 
 namespace MitigatingCircumstances.Areas.Identity.Pages.Account
 {
-    [AllowAnonymous]
+    [Authorize]
     public class LogoutModel : PageModel
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
@@ -34,7 +34,7 @@ namespace MitigatingCircumstances.Areas.Identity.Pages.Account
             }
             else
             {
-                return Page();
+                return Redirect("~/");
             }
         }
     }

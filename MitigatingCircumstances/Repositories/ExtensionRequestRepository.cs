@@ -20,12 +20,12 @@ namespace MitigatingCircumstances.Repositories
 
         public IEnumerable<ExtensionRequest> GetExtensionRequestsAssignedTo(string tutorId)
         {
-            return Context.ExtensionRequests.Where(t => t.TutorAssignedTo.Id == tutorId);
+            return Context.ExtensionRequests.Where(er => er.TutorAssignedTo.Id == tutorId).OrderBy(er => er.Status);
         }
 
         public IEnumerable<ExtensionRequest> GetExtensionRequestsCreatedBy(string studentId)
         {
-            return Context.ExtensionRequests.Where(t => t.StudentCreatedBy.Id == studentId);
+            return Context.ExtensionRequests.Where(er => er.StudentCreatedBy.Id == studentId).OrderBy(er => er.Status);
         }
 
         public void SaveExtensionRequest(ExtensionRequest extensionRequest)

@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 namespace MitigatingCircumstances.Pages.Student
 {
     [Authorize(Roles = Roles.Student)]
-    public class CreateApplicationsModel : PageModel
+    public class CreateExtensionRequestModel : PageModel
     {
         [BindProperty]
         public InputModel Input { get; set; }
@@ -46,7 +46,7 @@ namespace MitigatingCircumstances.Pages.Student
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ICloudStorageService _cloudStorageService;
 
-        public CreateApplicationsModel(IExtensionRequestRepository extensionRequestRepository, 
+        public CreateExtensionRequestModel(IExtensionRequestRepository extensionRequestRepository, 
             UserManager<ApplicationUser> userManager, ICloudStorageService cloudStorageService)
         {
             _extensionRequestRepository = extensionRequestRepository;
