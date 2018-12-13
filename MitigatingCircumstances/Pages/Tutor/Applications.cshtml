@@ -1,5 +1,7 @@
 ﻿@page
 @model ApplicationsModel
+@using MitigatingCircumstances.Models.Enum;
+
 @{
     ViewData["Title"] = "Student Application Forms";
 }
@@ -30,11 +32,29 @@ else
                     <td>@extensionRequest.Title</td>
                     <td>@extensionRequest.Description</td>
                     <td>
-                        <span class="badge badge-success">Open</span>
+                        @switch (extensionRequest.Status)
+                        {
+                            case ExtensionRequestStatus.Open:
+                                <span class="badge badge-info">Open</span>
+                                break;
+
+                            case ExtensionRequestStatus.Approved:
+                                <span class="badge badge-success">Approved</span>
+                                break;
+
+                            case ExtensionRequestStatus.Rejected:
+                                <span class="badge badge-danger">Rejected</span>
+                                break;
+
+                            case ExtensionRequestStatus.Closed:
+                                <span class="badge badge-secondary">Closed</span>
+                                break;
+                        }
                     </td>
                     <td>
-                        <button type="button" class="btn btn-default btn-sm">
+                        <button type="button" class="btn btn-info btn-sm">
                             Open
+                            <i class="fas fa-external-link-alt"></i>
                         </button>
                     </td>
                 </tr>

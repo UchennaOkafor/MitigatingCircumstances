@@ -19,7 +19,7 @@ namespace MitigatingCircumstances.Services
         {
             var from = new EmailAddress("test@test.com", "Mark Zuk");
             var subject = "Ladies and gentlemen, we've got em";
-            var to = new EmailAddress("myemail@hotmail.com", "My Name");
+            var to = new EmailAddress("okafor.u@hotmail.com", "My Name");
             var plainTextContent = "and easy to do anywhere, even with C#";
             var htmlContent = "<strong>and easy to do anywhere, even with C#</strong>";
             var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);

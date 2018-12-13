@@ -13,10 +13,9 @@ namespace MitigatingCircumstances.Controllers
     {
         private readonly ILogger _logger;
 
-        public HomeController(ILogger<HomeController> logger, IMailService mailService)
+        public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
-            mailService.SendEmail("", "");
         }
 
         public IActionResult Index()

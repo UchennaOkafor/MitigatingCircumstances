@@ -1,5 +1,7 @@
 ﻿@page
 @model ApplicationsModel
+@using MitigatingCircumstances.Models.Enum;
+
 @{
     ViewData["Title"] = "Extension Requests";
 }
@@ -19,7 +21,7 @@ else
                 <th scope="col">Application Form</th>
                 <th scope="col">Tutor</th>
                 <th scope="col">Status</th>
-                <th scope="col">Actions</th>
+                <th scope="col">Action</th>
             </tr>
         </thead>
         <tbody>
@@ -30,17 +32,29 @@ else
                     <td>@extensionRequest.Description</td>
                     <td>@extensionRequest.TutorAssignedTo.Fullname</td>
                     <td>
-                        <span class="badge badge-info">Open</span>
+                        @switch (extensionRequest.Status)
+                        {
+                            case ExtensionRequestStatus.Open:
+                                <span class="badge badge-info">Open</span>
+                                break;
+
+                            case ExtensionRequestStatus.Approved:
+                                <span class="badge badge-success">Approved</span>
+                                break;
+
+                            case ExtensionRequestStatus.Rejected:
+                                <span class="badge badge-danger">Rejected</span>
+                                break;
+
+                            case ExtensionRequestStatus.Closed:
+                                <span class="badge badge-secondary">Closed</span>
+                                break;
+                        }
                     </td>
                     <td>
                         <button type="button" class="btn btn-info btn-sm">
-                            Open
-                        </button>
-                        <button type="button" class="btn btn-info btn-sm">
+                            Edit
                             <i class="far fa-edit"></i>
-                        </button>
-                        <button type="button" class="btn btn-danger btn-sm">
-                            <i class="fas fa-times"></i>
                         </button>
                     </td>
                 </tr>
@@ -49,4 +63,7 @@ else
     </table>
 }
 
-<a class="btn btn-primary float-right" asp-page="./CreateExtensionRequest">Create extension request</a>
+<a class="btn btn-primary float-right" asp-page="./CreateExtensionRequest">
+    Create new
+    <i class="fas fa-pen"></i>
+</a>
