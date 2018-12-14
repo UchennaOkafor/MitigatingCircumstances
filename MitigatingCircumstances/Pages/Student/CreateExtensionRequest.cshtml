@@ -4,60 +4,91 @@
     ViewData["Title"] = "Create Extension Request";
 }
 
-<form method="post" enctype="multipart/form-data">
-    <div class="form-group">
-        <label asp-for="Input.Title"></label>
-        <input asp-for="Input.Title" type="text" class="form-control">
-        <span asp-validation-for="Input.Title" class="text-danger"></span>
-    </div>
+@{ 
+    var isPost = HttpContext.Request.Method == "POST";
+    var extensionCreated = isPost && Model.ExtensionRequestResult != null
+        && Model.ExtensionRequestResult.IsSuccessful;
+}
 
-    <div class="form-group">
-        <label asp-for="Input.Description"></label>
-        <textarea class="form-control" asp-for="Input.Description" rows="4"></textarea>
-        <span asp-validation-for="Input.Description" class="text-danger"></span>
-    </div>
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title text-center">Create extension request</h5>
+                <form id="createExtensionRequestForm" method="post" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label asp-for="Input.Title"></label>
+                        <input asp-for="Input.Title" type="text" class="form-control">
+                        <span asp-validation-for="Input.Title" class="text-danger"></span>
+                    </div>
 
-    <div class="form-group">
-        <label asp-for="Input.ChosenTutorId"></label>
-        <select asp-for="Input.ChosenTutorId" asp-items="@Model.AvailableTutors" class="form-control col-4">
-            <option value="">Select a tutor</option>
-        </select>
-        <span asp-validation-for="Input.ChosenTutorId" class="text-danger"></span>
-    </div>
+                    <div class="form-group">
+                        <label asp-for="Input.Description"></label>
+                        <textarea class="form-control" asp-for="Input.Description" rows="4"></textarea>
+                        <span asp-validation-for="Input.Description" class="text-danger"></span>
+                    </div>
 
-    <div class="form-group">
-        <label asp-for="Input.UploadedFiles"></label>
-        <input asp-for="Input.UploadedFiles" type="file" class="form-control-file" multiple>
-        <span asp-validation-for="Input.UploadedFiles" class="text-danger"></span>
-    </div>
+                    <div class="form-group">
+                        <label asp-for="Input.ChosenTutorId"></label>
+                        <select asp-for="Input.ChosenTutorId" asp-items="@Model.AvailableTutors" class="form-control col-4">
+                            <option value="">Select a tutor</option>
+                        </select>
+                        <span asp-validation-for="Input.ChosenTutorId" class="text-danger"></span>
+                    </div>
 
-    <div class="form-group">
-        <button type="submit" class="btn btn-primary float-right">
-            Submit
-            <i class="fas fa-angle-right"></i>
-        </button>
-    </div>
-</form>
+                    <div class="form-group">
+                        <label asp-for="Input.UploadedFiles"></label>
+                        <input asp-for="Input.UploadedFiles" type="file" class="form-control-file" multiple>
+                        <span asp-validation-for="Input.UploadedFiles" class="text-danger"></span>
+                    </div>
 
-@if (true)
-{
-<div class="alert alert-success alert-dismissible fade show" role="alert">
-    <strong>Nice!</strong> Your extension request has been created. Click here to view it {extensionRequestId}.
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-    </button>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary float-right">
+                            Submit
+                            <i class="fas fa-angle-right"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <br />
+
+        @if (isPost)
+        {
+            @if (extensionCreated)
+            {
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <strong>Nice!</strong> Your extension request has been created with id
+                    @Model.ExtensionRequestResult.CreatedExtensionRequestId. Click here to view it.
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    <strong>Holy guacamole!</strong> There was an error creating your extension request
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            }
+
+        }
+    </div>
 </div>
-}
-else
-{
-    <div class="alert alert-warning alert-dismissible fade show" role="alert">
-        <strong>Holy guacamole!</strong> You should check in on some of those fields below.
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
-}
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script>
+        $(() => {
+            $("#createExtensionRequestForm").on("submit", function (e) {
+                e.submit();
+                e.reset();
+                return false;
+            });
+        });   
+    </script>
 }

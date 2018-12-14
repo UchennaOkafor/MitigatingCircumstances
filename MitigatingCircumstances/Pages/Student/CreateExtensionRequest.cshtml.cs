@@ -24,6 +24,15 @@ namespace MitigatingCircumstances.Pages.Student
 
         public List<SelectListItem> AvailableTutors { get; set; }
 
+        public CreateExtensionRequestResult ExtensionRequestResult { get; set; }
+
+        public class CreateExtensionRequestResult
+        {
+            public bool IsSuccessful { get; set; }
+
+            public int CreatedExtensionRequestId { get; set; }
+        }
+
         public class InputModel
         {
             [Required]
@@ -60,6 +69,8 @@ namespace MitigatingCircumstances.Pages.Student
 
         public async Task<IActionResult> OnPostAsync()
         {
+            ExtensionRequestResult = new CreateExtensionRequestResult();
+
             if (ModelState.IsValid)
             {
                 var student = await _userManager.GetUserAsync(User);
@@ -80,6 +91,9 @@ namespace MitigatingCircumstances.Pages.Student
                 }
 
                 _extensionRequestRepository.SaveExtensionRequest(extensionRequest);
+
+                ExtensionRequestResult.IsSuccessful = true;
+                ExtensionRequestResult.CreatedExtensionRequestId = extensionRequest.Id;
             }
 
             return Page();
