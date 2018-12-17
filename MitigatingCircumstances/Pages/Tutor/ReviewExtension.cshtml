@@ -1,64 +1,99 @@
 ﻿@page
 @model ReviewExtensionModel
+@using MitigatingCircumstances.Models.Enum;
+
 @{
     ViewData["Title"] = "Create Extension Request";
 }
 
+@if (Model.ExtensionRequest == null)
+{
+    <div class="alert alert-warning alert-dismissible" role="alert">
+        Sorry, the item you're looking for cannot be found.
+    </div>
+    return;
+}
+
 <div class="row justify-content-center">
-    @if (Model.ExtensionRequest == null)
-    {
-        <div class="alert alert-warning alert-dismissible" role="alert">
-            Sorry, the item you're looking for cannot be found.
-        </div>
-    }
-    else
-    {
-        <div class="col-sm-12 col-xs-12 col-md-10 col-lg-7">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title text-center">Review extension request</h5>
-                    <div class="form-group">
-                        <h6>Title</h6>
-                        <p>@Model.ExtensionRequest.Title</p>
-                    </div>
+    <div class="col-sm-12 col-xs-12 col-md-10 col-lg-7">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title text-center">Review extension request</h5>
+                <div class="form-group">
+                    <h6>Title</h6>
+                    <p>@Model.ExtensionRequest.Title</p>
+                </div>
 
-                    <div class="form-group">
-                        <h6>Description</h6>
-                        <p> @Model.ExtensionRequest.Description</p>
-                    </div>
+                <div class="form-group">
+                    <h6>Description</h6>
+                    <p> @Model.ExtensionRequest.Description</p>
+                </div>
 
-                    <div class="form-group">
-                        <h6>Uploaded documents</h6>
-                        <ul>
-                            @foreach (var document in Model.ExtensionRequest.UploadedDocuments)
-                            {
-                                <li><a href="@document.MediaLink">@document.Name</a></li>
-                            }
-                        </ul>
-                    </div>
+                <div class="form-group">
+                    <h6>Uploaded documents</h6>
+                    <ul>
+                        @foreach (var document in Model.ExtensionRequest.UploadedDocuments)
+                        {
+                            <li><a href="@document.MediaLink">@document.Name</a></li>
+                        }
+                    </ul>
+                </div>
 
-                    <div>
-                        <h5>Status</h5>
-                        <hr />
-                        <div class="form-group">
-                            <button class="btn btn-success ">
-                                Approve
-                                <i class="fas fa-check"></i>
-                            </button>
+                <div class="form-group">
+                    <h6>Status</h6>
+                    <p>
+                        @switch (Model.ExtensionRequest.Status)
+                        {
+                            case ExtensionRequestStatus.Open:
+                                <span class="badge badge-info">Open</span>
+                                break;
 
-                            <button class="btn btn-danger">
-                                Reject
-                                <i class="fas fa-times"></i>
-                            </button>
+                            case ExtensionRequestStatus.Approved:
+                                <span class="badge badge-success">Approved</span>
+                                break;
 
-                            <button class="btn btn-secondary">
-                                Close
-                                <i class="fas fa-door-closed"></i>
-                            </button>
-                        </div>
-                    </div>
+                            case ExtensionRequestStatus.Rejected:
+                                <span class="badge badge-danger">Rejected</span>
+                                break;
+
+                            case ExtensionRequestStatus.Closed:
+                                <span class="badge badge-secondary">Closed</span>
+                                break;
+                        }
+                    </p>
                 </div>
             </div>
         </div>
-    }
+    </div>
 </div>
+
+
+@if (Model.ExtensionRequest.Status == ExtensionRequestStatus.Open)
+{
+    <br />
+    <div class="row justify-content-center">
+        <div class="col-sm-12 col-xs-12 col-md-10 col-lg-7">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="text-center">Action</h5>
+                    <label>Reply</label>
+                    <textarea class="form-control" rows="4"></textarea>
+                    <br />
+                    <p class="float-right">
+                        <button class="btn btn-success">
+                            Approve
+                        </button>
+
+                        <button class="btn btn-danger">
+                            Reject
+                        </button>
+
+                        <button class="btn btn-secondary">
+                            Close
+                        </button>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+}
