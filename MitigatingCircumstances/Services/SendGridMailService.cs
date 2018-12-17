@@ -15,11 +15,11 @@ namespace MitigatingCircumstances.Services
             _sendGridClient = new SendGridClient(apiKey);
         }
 
-        public void SendEmail(string toEmail, string message)
+        public void SendEmail(string toEmail, string toName)
         {
-            var from = new EmailAddress("test@test.com", "Mark Zuk");
+            var from = new EmailAddress("no-reply@support.cloud", "Support Hub");
             var subject = "Ladies and gentlemen, we've got em";
-            var to = new EmailAddress("okafor.u@hotmail.com", "My Name");
+            var to = new EmailAddress(toEmail, toName);
             var plainTextContent = "and easy to do anywhere, even with C#";
             var htmlContent = "<strong>and easy to do anywhere, even with C#</strong>";
             var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);

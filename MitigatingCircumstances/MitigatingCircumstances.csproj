@@ -48,6 +48,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="MailTemplates\" />
     <Folder Include="wwwroot\images\" />
   </ItemGroup>
 

@@ -22,7 +22,7 @@ namespace MitigatingCircumstances.Pages.Student
         [BindProperty]
         public InputModel Input { get; set; }
 
-        public List<SelectListItem> AvailableTutors { get; set; }
+        public IEnumerable<SelectListItem> AvailableTutors { get; set; }
 
         public CreateExtensionRequestResult ExtensionRequestResult { get; set; }
 
@@ -62,9 +62,13 @@ namespace MitigatingCircumstances.Pages.Student
             _cloudStorageService = cloudStorageService;
             _userManager = userManager;
 
-            var tutors = _userManager.GetUsersInRoleAsync(Roles.Tutor).Result;
+            InitializeTutors().Wait();
+        }
 
-            AvailableTutors = tutors.Select(t => new SelectListItem { Value = t.Id, Text = t.Fullname }).ToList();
+        private async Task InitializeTutors()
+        {
+            var tutors = await _userManager.GetUsersInRoleAsync(Roles.Tutor);
+            AvailableTutors = tutors.Select(t => new SelectListItem { Value = t.Id, Text = t.Fullname });
         }
 
         public async Task<IActionResult> OnPostAsync()
