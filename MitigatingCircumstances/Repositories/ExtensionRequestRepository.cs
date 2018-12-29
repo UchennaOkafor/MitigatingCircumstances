@@ -1,6 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Http;
 using MitigatingCircumstances.Models;
 using MitigatingCircumstances.Repositories.Base;
+using MitigatingCircumstances.Services.Interface;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -8,9 +9,11 @@ namespace MitigatingCircumstances.Repositories
 {
     public class ExtensionRequestRepository : BaseRepository, IExtensionRequestRepository
     {
-        public ExtensionRequestRepository(ApplicationDbContext dbContext) : base(dbContext)
+        private readonly ICloudStorageService _cloudStorageService;
+
+        public ExtensionRequestRepository(ApplicationDbContext dbContext, ICloudStorageService storageService) : base(dbContext)
         {
-            
+            _cloudStorageService = storageService;
         }
 
         public ExtensionRequest GetExtensionRequestById(int id)
@@ -26,6 +29,27 @@ namespace MitigatingCircumstances.Repositories
         public IEnumerable<ExtensionRequest> GetExtensionRequestsCreatedBy(string studentId)
         {
             return Context.ExtensionRequests.Where(er => er.StudentCreatedBy.Id == studentId).OrderBy(er => er.Status);
+        }
+
+        public List<UploadedDocument> UploadFilesFor(ExtensionRequest extensionRequest, List<IFormFile> formFiles)
+        {
+            var uploadedObjects = _cloudStorageService.UploadFormFiles(formFiles);
+            var uploadedDocuments = new List<UploadedDocument>();
+
+            foreach (var file in uploadedObjects)
+            {
+                uploadedDocuments.Add(new UploadedDocument
+                {
+                    CloudId = file.Id,
+                    Bucket = file.Bucket,
+                    MediaLink = file.MediaLink,
+                    Name = file.Name,
+                    ExtensionRequest = extensionRequest,
+                    UploadedBy = extensionRequest.StudentCreatedBy
+                });
+            }
+
+            return uploadedDocuments;
         }
 
         public void SaveExtensionRequest(ExtensionRequest extensionRequest)

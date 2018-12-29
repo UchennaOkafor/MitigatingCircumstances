@@ -1,0 +1,87 @@
+﻿using Newtonsoft.Json;
+using System.Collections.Generic;
+
+namespace MitigatingCircumstances.Models
+{
+    /// <summary>
+    /// A model with the data format of the Inbound Parse API's POST
+    /// </summary>
+    public class InboundEmail
+    {
+        /// <summary>
+        /// The Domain Keys Identified Email code for the email
+        /// </summary>
+        public string Dkim { get; set; }
+
+        /// <summary>
+        /// The email address that the email was sent to
+        /// </summary>
+        public string To { get; set; }
+
+        /// <summary>
+        /// The HTML body of the email
+        /// </summary>
+        public string Html { get; set; }
+
+        /// <summary>
+        /// The email address the email was sent from
+        /// </summary>
+        public string From { get; set; }
+
+        /// <summary>
+        /// The Text body of the email
+        /// </summary>
+        public string Text { get; set; }
+
+        /// <summary>
+        /// The Ip address of the sender of the email
+        /// </summary>
+        public string SenderIp { get; set; }
+
+        /// <summary>
+        /// An object containing the SMTP envelope. This will have 2 variables: to, which is an array of recipients, and from, which is the return path for the message.
+        /// </summary>
+        public Envelope Envelope { get; set; }
+
+        /// <summary>
+        /// Number of attachments included in email
+        /// </summary>
+        public int Attachments { get; set; }
+
+        /// <summary>
+        /// The subject of the email
+        /// </summary>
+        public string Subject { get; set; }
+
+        /// <summary>
+        /// A JSON string containing the character sets of the fields extracted from the message.
+        /// </summary>
+        public string Charsets { get; set; }
+
+        /// <summary>
+        /// The results of the Sender Policy Framework verification of the message sender and receiving IP address.
+        /// </summary>
+        public string Spf { get; set; }
+
+        public string SendersName
+        {
+            get
+            {
+                var angleBracketIndex = From.LastIndexOf('<');
+                var fullName = From.Substring(0, angleBracketIndex);
+
+                return fullName.Trim();
+            }
+        }
+    }
+
+    public class Envelope
+    {
+        [JsonProperty(PropertyName = "to")]
+        public List<string> To { get; set; }
+
+
+        [JsonProperty(PropertyName = "from")]
+        public string From { get; set; }
+    }
+}

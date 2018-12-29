@@ -8,7 +8,6 @@ using MitigatingCircumstances.Models;
 using MitigatingCircumstances.Models.Enum;
 using MitigatingCircumstances.Models.Static;
 using MitigatingCircumstances.Repositories.Base;
-using MitigatingCircumstances.Services.Interface;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -53,13 +52,11 @@ namespace MitigatingCircumstances.Pages.Student
 
         private readonly IExtensionRequestRepository _extensionRequestRepository;
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly ICloudStorageService _cloudStorageService;
 
         public CreateExtensionRequestModel(IExtensionRequestRepository extensionRequestRepository, 
-            UserManager<ApplicationUser> userManager, ICloudStorageService cloudStorageService)
+            UserManager<ApplicationUser> userManager)
         {
             _extensionRequestRepository = extensionRequestRepository;
-            _cloudStorageService = cloudStorageService;
             _userManager = userManager;
 
             InitializeTutors().Wait();
@@ -91,7 +88,8 @@ namespace MitigatingCircumstances.Pages.Student
 
                 if (Input.UploadedFiles != null && Input.UploadedFiles.Any())
                 {
-                    extensionRequest.UploadedDocuments = UploadFiles(extensionRequest, Input.UploadedFiles);
+                    extensionRequest.UploadedDocuments = 
+                        _extensionRequestRepository.UploadFilesFor(extensionRequest, Input.UploadedFiles);
                 }
 
                 _extensionRequestRepository.SaveExtensionRequest(extensionRequest);
@@ -101,31 +99,6 @@ namespace MitigatingCircumstances.Pages.Student
             }
 
             return Page();
-        }
-
-        public List<UploadedDocument> UploadFiles(ExtensionRequest extensionRequest, List<IFormFile> formFiles)
-        {
-            var uploadedDocuments = new List<UploadedDocument>();
-
-            foreach (var formFile in formFiles)
-            {
-                if (formFile.Length > 0)
-                {
-                    var response = _cloudStorageService.UploadFormFile(formFile);
-
-                    uploadedDocuments.Add(new UploadedDocument
-                    {
-                        CloudId = response.Id,
-                        Bucket = response.Bucket,
-                        MediaLink = response.MediaLink,
-                        Name = formFile.FileName,
-                        ExtensionRequest = extensionRequest,
-                        UploadedBy = extensionRequest.StudentCreatedBy
-                    });
-                }
-            }
-
-            return uploadedDocuments;
         }
     }
 }
