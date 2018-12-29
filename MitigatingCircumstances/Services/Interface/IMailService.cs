@@ -1,9 +1,13 @@
-﻿namespace MitigatingCircumstances.Services.Interface
+﻿using MitigatingCircumstances.Models;
+
+namespace MitigatingCircumstances.Services.Interface
 {
     public interface IMailService
     {
-        void SendEmail(string toEmail, string toName);
+        void SendInboundEmailExtensionCreated(string toEmail, string toName, ExtensionRequest extensionRequest);
 
-        void SendEmail(string toEmail, string toName, string message);
+        void SendInboundEmailDoesntExistEmail(string toEmail, string toName, string extensionRequestTitle);
+
+        void SendTeacherCreatedNotificationEmail(ApplicationUser teacher, ApplicationUser student, ExtensionRequest extensionRequest);
     }
 }

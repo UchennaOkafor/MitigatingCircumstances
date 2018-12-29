@@ -35,29 +35,41 @@ namespace MitigatingCircumstances.Controllers.Api
         public async Task<ActionResult<HttpResponseMessage>> Mail()
         {
             var email = ParseInboundEmail();
-            var studentFrom = await _userManager.FindByEmailAsync(email.Envelope.From);
+            var student = await _userManager.FindByEmailAsync(email.Envelope.From);
             var teachers = await _userManager.GetUsersInRoleAsync(Roles.Tutor);
-            var randomlySelectedTeacher = teachers.OrderBy(g => Guid.NewGuid()).ElementAt(0);
+            var selectedTeacher = teachers.OrderBy(g => Guid.NewGuid()).ElementAt(0);
 
-            var extensionRequest = new ExtensionRequest
+            if (student == null)
             {
-                Description = email.Text,
-                Title = email.Subject,
-                Status = ExtensionRequestStatus.Open,
-                StudentCreatedBy = studentFrom,
-                TutorAssignedTo = randomlySelectedTeacher,
-            };
-
-            if (Request.Form?.Files?.Count > 0)
-            {
-                extensionRequest.UploadedDocuments = 
-                    _extensionRequestRepository.UploadFilesFor(extensionRequest, Request.Form.Files.ToList());
+                _mailService.SendInboundEmailDoesntExistEmail(email.Envelope.From, email.SendersName, email.Subject);
+                return new HttpResponseMessage(HttpStatusCode.OK);
             }
+            else
+            {
+                var extensionRequest = new ExtensionRequest
+                {
+                    Description = email.Text,
+                    Title = email.Subject,
+                    Status = ExtensionRequestStatus.Open,
+                    StudentCreatedBy = student,
+                    TutorAssignedTo = selectedTeacher,
+                };
 
-            _extensionRequestRepository.SaveExtensionRequest(extensionRequest);
-            _mailService.SendEmail(email.Envelope.From, email.SendersName, $"Your extension request has been created successfully! with id {extensionRequest.Id}");
+                if (Request.Form?.Files?.Count > 0)
+                {
+                    extensionRequest.UploadedDocuments =
+                        _extensionRequestRepository.UploadFilesFor(extensionRequest, Request.Form.Files.ToList());
+                }
 
-            return new HttpResponseMessage(HttpStatusCode.OK);
+                _extensionRequestRepository.SaveExtensionRequest(extensionRequest);
+
+                _mailService.SendInboundEmailExtensionCreated(email.Envelope.From, email.SendersName, extensionRequest);
+
+                _mailService.SendTeacherCreatedNotificationEmail(extensionRequest.TutorAssignedTo, 
+                    extensionRequest.StudentCreatedBy, extensionRequest);
+
+                return new HttpResponseMessage(HttpStatusCode.Created);
+            }
         }
 
         private InboundEmail ParseInboundEmail()

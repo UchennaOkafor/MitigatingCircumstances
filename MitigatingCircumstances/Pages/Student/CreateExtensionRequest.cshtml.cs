@@ -8,6 +8,7 @@ using MitigatingCircumstances.Models;
 using MitigatingCircumstances.Models.Enum;
 using MitigatingCircumstances.Models.Static;
 using MitigatingCircumstances.Repositories.Base;
+using MitigatingCircumstances.Services.Interface;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -52,12 +53,14 @@ namespace MitigatingCircumstances.Pages.Student
 
         private readonly IExtensionRequestRepository _extensionRequestRepository;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IMailService _mailerService;
 
         public CreateExtensionRequestModel(IExtensionRequestRepository extensionRequestRepository, 
-            UserManager<ApplicationUser> userManager)
+            UserManager<ApplicationUser> userManager, IMailService mailerService)
         {
-            _extensionRequestRepository = extensionRequestRepository;
             _userManager = userManager;
+            _mailerService = mailerService;
+            _extensionRequestRepository = extensionRequestRepository;
 
             InitializeTutors().Wait();
         }
@@ -93,6 +96,8 @@ namespace MitigatingCircumstances.Pages.Student
                 }
 
                 _extensionRequestRepository.SaveExtensionRequest(extensionRequest);
+
+                _mailerService.SendTeacherCreatedNotificationEmail(tutor, student, extensionRequest);
 
                 ExtensionRequestResult.IsSuccessful = true;
                 ExtensionRequestResult.CreatedExtensionRequestId = extensionRequest.Id;

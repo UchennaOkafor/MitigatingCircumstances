@@ -1,10 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using MitigatingCircumstances.Services.Interface;
-using SendGrid;
-using SendGrid.Helpers.Mail;
 
 namespace MitigatingCircumstances.Controllers
 {

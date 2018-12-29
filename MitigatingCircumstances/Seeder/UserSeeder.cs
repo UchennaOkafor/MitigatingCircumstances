@@ -3,7 +3,6 @@ using Microsoft.Extensions.DependencyInjection;
 using MitigatingCircumstances.Models;
 using MitigatingCircumstances.Models.Static;
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace MitigatingCircumstances.Seeder
