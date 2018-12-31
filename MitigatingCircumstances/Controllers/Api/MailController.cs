@@ -15,7 +15,7 @@ using MitigatingCircumstances.Services.Interface;
 namespace MitigatingCircumstances.Controllers.Api
 {
     [Produces("application/json")]
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class MailController : ControllerBase
     {
@@ -32,7 +32,7 @@ namespace MitigatingCircumstances.Controllers.Api
         }
 
         [HttpPost]
-        public async Task<ActionResult<HttpResponseMessage>> Mail()
+        public async Task<ActionResult<HttpResponseMessage>> Parse()
         {
             var email = ParseInboundEmail();
             var student = await _userManager.FindByEmailAsync(email.Envelope.From);

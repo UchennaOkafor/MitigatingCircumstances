@@ -5,10 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using MitigatingCircumstances.Models;
-using MitigatingCircumstances.Models.Enum;
 using MitigatingCircumstances.Models.Static;
-using MitigatingCircumstances.Repositories.Base;
-using MitigatingCircumstances.Services.Interface;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -19,22 +16,14 @@ namespace MitigatingCircumstances.Pages.Student
     [Authorize(Roles = Roles.Student)]
     public class CreateExtensionRequestModel : PageModel
     {
+        public IEnumerable<SelectListItem> AvailableTutors { get; set; }
+
         [BindProperty]
         public InputModel Input { get; set; }
 
-        public IEnumerable<SelectListItem> AvailableTutors { get; set; }
-
-        public CreateExtensionRequestResult CreateExtensionResult { get; set; }
-
-        public class CreateExtensionRequestResult
-        {
-            public bool Created { get; set; }
-
-            public string Name { get; set; }
-        }
-
         public class InputModel
         {
+            [BindProperty(Name = "Title")]
             [Required]
             [Display(Prompt = "The title of your extraneous circumstance")]
             public string Title { get; set; }
@@ -51,65 +40,22 @@ namespace MitigatingCircumstances.Pages.Student
             public string ChosenTutorId { get; set; }
         }
 
-        private readonly IExtensionRequestRepository _extensionRequestRepository;
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly IMailService _mailerService;
 
-        public CreateExtensionRequestModel(IExtensionRequestRepository extensionRequestRepository, 
-            UserManager<ApplicationUser> userManager, IMailService mailerService)
+        public CreateExtensionRequestModel(UserManager<ApplicationUser> userManager)
         {
             _userManager = userManager;
-            _mailerService = mailerService;
-            _extensionRequestRepository = extensionRequestRepository;
-
-            InitializeTutors().Wait();
-            CreateExtensionResult = new CreateExtensionRequestResult();
         }
 
-        public void OnGet()
+        public async void OnGetAsync()
         {
-
+            await InitializeTutors();
         }
 
         private async Task InitializeTutors()
         {
             var tutors = await _userManager.GetUsersInRoleAsync(Roles.Tutor);
             AvailableTutors = tutors.Select(t => new SelectListItem { Value = t.Id, Text = t.Fullname });
-        }
-
-        public async Task<IActionResult> OnPostAsync()
-        {
-            if (ModelState.IsValid)
-            {
-                var student = await _userManager.GetUserAsync(User);
-                var tutor = await _userManager.FindByIdAsync(Input.ChosenTutorId);
-
-                var extensionRequest = new ExtensionRequest
-                {
-                    Title = Input.Title,
-                    Description = Input.Description,
-                    Status = ExtensionRequestStatus.Open,
-                    StudentCreatedBy = student,
-                    TutorAssignedTo = tutor
-                };
-
-                if (Input.UploadedFiles != null && Input.UploadedFiles.Any())
-                {
-                    extensionRequest.UploadedDocuments = 
-                        _extensionRequestRepository.UploadFilesFor(extensionRequest, Input.UploadedFiles);
-                }
-
-                _extensionRequestRepository.SaveExtensionRequest(extensionRequest);
-
-                //_mailerService.SendTeacherCreatedNotificationEmail(tutor, student, extensionRequest);
-
-                CreateExtensionResult.Created = true;
-                CreateExtensionResult.Name = extensionRequest.Title;
-
-                return RedirectToPage(CreateExtensionResult);
-            }
-
-            return Page();
         }
     }
 }
