@@ -20,6 +20,11 @@
             <div class="card-body">
                 <h5 class="card-title text-center">Review extension request</h5>
                 <div class="form-group">
+                    <h6>Student</h6>
+                    <p>@Model.ExtensionRequest.StudentCreatedBy.Fullname</p>
+                </div>
+
+                <div class="form-group">
                     <h6>Title</h6>
                     <p>@Model.ExtensionRequest.Title</p>
                 </div>
@@ -45,19 +50,19 @@
                         @switch (Model.ExtensionRequest.Status)
                         {
                             case ExtensionRequestStatus.Open:
-                                <span class="badge badge-info">Open</span>
+                                <span class="badge badge-big badge-info">Open</span>
                                 break;
 
                             case ExtensionRequestStatus.Approved:
-                                <span class="badge badge-success">Approved</span>
+                                <span class="badge badge-big badge-success">Approved</span>
                                 break;
 
                             case ExtensionRequestStatus.Rejected:
-                                <span class="badge badge-danger">Rejected</span>
+                                <span class="badge badge-big badge-danger">Rejected</span>
                                 break;
 
                             case ExtensionRequestStatus.Closed:
-                                <span class="badge badge-secondary">Closed</span>
+                                <span class="badge badge-big badge-secondary">Closed</span>
                                 break;
                         }
                     </p>
@@ -80,15 +85,15 @@
                     <textarea class="form-control" rows="4"></textarea>
                     <br />
                     <p class="float-right">
-                        <button class="btn btn-success">
+                        <button data-button-action="approve" class="btn btn-success change-extension-state">
                             Approve
                         </button>
 
-                        <button class="btn btn-danger">
+                        <button data-button-action="reject" class="btn btn-danger change-extension-state">
                             Reject
                         </button>
 
-                        <button class="btn btn-secondary">
+                        <button data-button-action="close" class="btn btn-secondary change-extension-state">
                             Close
                         </button>
                     </p>

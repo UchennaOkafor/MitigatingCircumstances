@@ -12,6 +12,10 @@ using MitigatingCircumstances.DependencyInjection;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.HttpOverrides;
 using MitigatingCircumstances.Seeder;
+using System.Linq;
+using Microsoft.AspNetCore.Rewrite;
+using System.Text;
+using MitigatingCircumstances.Rules;
 
 namespace MitigatingCircumstances
 {
@@ -87,6 +91,13 @@ namespace MitigatingCircumstances
                         ForwardedHeaders = ForwardedHeaders.XForwardedProto
                     });
 
+                    var options = new RewriteOptions();
+                        
+                    options.Rules.Add(new NonWwwRule());
+                    options.AddRedirectToHttps();
+
+                    app.UseRewriter(options);
+
                     var logger = app.ApplicationServices.GetService<ILoggerFactory>().CreateLogger("Startup");
                     if (HasGcpProjectId)
                     {
@@ -124,6 +135,7 @@ namespace MitigatingCircumstances
                     else
                     {
                         app.UseExceptionHandler("/Home/Error");
+                        app.UseHsts();
                     }
 
                     app.UseHttpsRedirection();

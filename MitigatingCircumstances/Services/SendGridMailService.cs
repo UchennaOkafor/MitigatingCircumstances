@@ -14,6 +14,7 @@ namespace MitigatingCircumstances.Services
         private readonly string _userNotExistTemplateId;
         private readonly string _extensionRequestCreatedTemplateId;
         private readonly string _extensionCreatedTeacherNotificationTemplateId;
+        private readonly string _teacherRequestsMoreInfoTemplateId;
 
         private readonly string _urlDomain;
 
@@ -26,6 +27,7 @@ namespace MitigatingCircumstances.Services
             _userNotExistTemplateId = "d-2837e475bc4b4f9484d21c163d033f59";
             _extensionRequestCreatedTemplateId = "d-9c7d3fb57e9446219a66d12225c9b373";
             _extensionCreatedTeacherNotificationTemplateId = "d-7e225f1fa0534146b35711fe385329be";
+            _teacherRequestsMoreInfoTemplateId = "d-c85fc0282a05407285f48016195e4981";
 
             _urlDomain = "https://supporthub.cloud";
         }
@@ -45,7 +47,7 @@ namespace MitigatingCircumstances.Services
                     Description = extensionRequest.Description,
                     TeacherAssignedTo = extensionRequest.TutorAssignedTo.Fullname,
                     AttachmentCount = extensionRequest.UploadedDocuments?.Count,
-                    LinkUrl = $"{_urlDomain}/Student/ViewExtensionRequest?id={extensionRequest.Id}"
+                    LinkUrl = $"{_urlDomain}/Student/Applications"
                 }
             };
 
@@ -100,6 +102,36 @@ namespace MitigatingCircumstances.Services
             var to = new EmailAddress(teacher.Email, teacher.Fullname);
             var msg = MailHelper.CreateSingleTemplateEmail(
                 _fromEmailAddress, to, _extensionCreatedTeacherNotificationTemplateId, dynamicTemplateData);
+
+            await _sendGridClient.SendEmailAsync(msg);
+        }
+
+        public async void SendTeacherRequestMoreInfoEmail(ApplicationUser teacher,
+    ApplicationUser student, ExtensionRequest extensionRequest, string requestMessage)
+        {
+            var dynamicTemplateData = new
+            {
+                Student = new
+                {
+                    Name = student.Fullname
+                },
+                Teacher = new
+                {
+                    Name = teacher.Fullname
+                },
+                Extension = new
+                {
+                    Title = extensionRequest.Title
+                },
+                Request = new
+                {
+                    Message = requestMessage
+                }
+            };
+
+            var to = new EmailAddress(student.Email, student.Fullname);
+            var msg = MailHelper.CreateSingleTemplateEmail(
+                _fromEmailAddress, to, _teacherRequestsMoreInfoTemplateId, dynamicTemplateData);
 
             await _sendGridClient.SendEmailAsync(msg);
         }

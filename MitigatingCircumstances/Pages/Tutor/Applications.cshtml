@@ -19,8 +19,8 @@ else
             <tr>
                 <th scope="col">Student</th>
                 <th scope="col">Title</th>
-                <th scope="col">Application Form</th>
-                <th scope="col">State</th>
+                <th scope="col">Description</th>
+                <th scope="col">Status</th>
                 <th scope="col">Action</th>
             </tr>
         </thead>
@@ -52,7 +52,7 @@ else
                         }
                     </td>
                     <td>
-                        <a class="btn btn-info btn-sm" asp-page="./ReviewExtension" asp-route-id="@extensionRequest.Id">
+                        <a class="btn btn-outline-secondary btn-sm" asp-page="./ReviewExtension" asp-route-id="@extensionRequest.Id">
                             Open
                             <i class="fas fa-external-link-alt"></i>
                         </a>

@@ -5,9 +5,7 @@
 }
 
 @{ 
-    var isPost = HttpContext.Request.Method == "POST";
-    var extensionCreated = isPost && Model.ExtensionRequestResult != null
-        && Model.ExtensionRequestResult.IsSuccessful;
+    var isGet = HttpContext.Request.Method == "GET";
 }
 
 <div class="row justify-content-center">
@@ -54,28 +52,23 @@
 
         <br />
 
-        @if (isPost)
+        @if (Model.CreateExtensionResult.Created)
         {
-            @if (extensionCreated)
-            {
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    <strong>Nice!</strong> Your extension request has been created with id
-                    @Model.ExtensionRequestResult.CreatedExtensionRequestId. Click here to view it.
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-            }
-            else
-            {
-                <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                    <strong>Holy guacamole!</strong> There was an error creating your extension request
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-            }
-
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <strong>Nice!</strong> Your extension request titled @Model.CreateExtensionResult.Name has been created successfully
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                <strong>Holy guacamole!</strong> There was an error creating your extension request
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
         }
     </div>
 </div>

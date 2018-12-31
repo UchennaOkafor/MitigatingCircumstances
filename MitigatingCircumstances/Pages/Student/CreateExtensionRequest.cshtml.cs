@@ -24,13 +24,13 @@ namespace MitigatingCircumstances.Pages.Student
 
         public IEnumerable<SelectListItem> AvailableTutors { get; set; }
 
-        public CreateExtensionRequestResult ExtensionRequestResult { get; set; }
+        public CreateExtensionRequestResult CreateExtensionResult { get; set; }
 
         public class CreateExtensionRequestResult
         {
-            public bool IsSuccessful { get; set; }
+            public bool Created { get; set; }
 
-            public int CreatedExtensionRequestId { get; set; }
+            public string Name { get; set; }
         }
 
         public class InputModel
@@ -63,6 +63,12 @@ namespace MitigatingCircumstances.Pages.Student
             _extensionRequestRepository = extensionRequestRepository;
 
             InitializeTutors().Wait();
+            CreateExtensionResult = new CreateExtensionRequestResult();
+        }
+
+        public void OnGet()
+        {
+
         }
 
         private async Task InitializeTutors()
@@ -73,8 +79,6 @@ namespace MitigatingCircumstances.Pages.Student
 
         public async Task<IActionResult> OnPostAsync()
         {
-            ExtensionRequestResult = new CreateExtensionRequestResult();
-
             if (ModelState.IsValid)
             {
                 var student = await _userManager.GetUserAsync(User);
@@ -97,10 +101,12 @@ namespace MitigatingCircumstances.Pages.Student
 
                 _extensionRequestRepository.SaveExtensionRequest(extensionRequest);
 
-                _mailerService.SendTeacherCreatedNotificationEmail(tutor, student, extensionRequest);
+                //_mailerService.SendTeacherCreatedNotificationEmail(tutor, student, extensionRequest);
 
-                ExtensionRequestResult.IsSuccessful = true;
-                ExtensionRequestResult.CreatedExtensionRequestId = extensionRequest.Id;
+                CreateExtensionResult.Created = true;
+                CreateExtensionResult.Name = extensionRequest.Title;
+
+                return RedirectToPage(CreateExtensionResult);
             }
 
             return Page();
