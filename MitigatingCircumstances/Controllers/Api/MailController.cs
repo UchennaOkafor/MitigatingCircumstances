@@ -14,9 +14,8 @@ using MitigatingCircumstances.Services.Interface;
 
 namespace MitigatingCircumstances.Controllers.Api
 {
-    [Produces("application/json")]
-    [Route("api/[controller]/[action]")]
     [ApiController]
+    [Route("api/[controller]/[action]")]   
     public class MailController : ControllerBase
     {
         private readonly IMailService _mailService;

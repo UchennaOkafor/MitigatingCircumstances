@@ -23,19 +23,20 @@ namespace MitigatingCircumstances.Pages.Student
 
         public class InputModel
         {
-            [BindProperty(Name = "Title")]
             [Required]
-            [Display(Prompt = "The title of your extraneous circumstance")]
+            [BindProperty(Name = "Input.Title")]
             public string Title { get; set; }
 
             [Required]
-            [Display(Prompt = "A concise description of your extraneous circumstance")]
+            [BindProperty(Name = "Input.Description")]
             public string Description { get; set; }
 
+            [BindProperty(Name = "Input.UploadedFiles")]
             [Display(Name = "Supporting Documents")]
             public List<IFormFile> UploadedFiles { get; set; }
 
             [Required]
+            [BindProperty(Name = "Input.ChosenTutorId")]
             [Display(Name = "Assigned Tutor")]
             public string ChosenTutorId { get; set; }
         }

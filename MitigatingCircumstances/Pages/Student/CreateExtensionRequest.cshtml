@@ -9,7 +9,7 @@
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title text-center">Create extension request</h5>
-                <form id="createExtensionRequestForm" method="post" enctype="multipart/form-data">
+                <form id="extensionRequestForm" method="post" enctype="multipart/form-data">
                     <div class="form-group">
                         <label asp-for="Input.Title"></label>
                         <input asp-for="Input.Title" type="text" class="form-control">
@@ -51,13 +51,13 @@
                 <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
             </div>
 
-            <div v-if="request.successful" class="alert alert-success alert-dismissible fade show" role="alert">
+            <div v-if="initialized && request.successful" class="alert alert-success alert-dismissible fade show" role="alert">
                 Your extension request titled <strong>{{request.title}}</strong> has been created successfully
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div v-else class="alert alert-warning alert-dismissible fade show" role="alert">
+            <div v-else-if="initialized && ! request.successful" class="alert alert-warning alert-dismissible fade show" role="alert">
                 <strong>Holy guacamole!</strong> There was an error creating your extension request {{request.errorMsg}}
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
@@ -71,9 +71,11 @@
     <partial name="_ValidationScriptsPartial" />
     <script>
         $(() => {
-            var app = new Vue({
-                el: '#formUserFeedback',
-                data: {                   
+            let form = $("#extensionRequestForm")[0];
+            let app = new Vue({
+                el: "#formUserFeedback",
+                data: {   
+                    initialized: false,
                     request: {
                         loading: false,
                         successful: false,
@@ -83,20 +85,17 @@
                 }
             });
 
-            let form = $("#createExtensionRequestForm")[0];
-
             $(form).on("submit", e => {
                 e.preventDefault();
-                
-                if (! app.request.loading && $(form).valid()) {
-                    var formData = new FormData($(form));
+
+                if (!app.request.loading && $(form).valid()) {
+                    var formData = new FormData(form);
 
                     $.ajax({
                         type: "POST",
                         url: "/api/extension_request/create",
                         processData: false,
                         contentType: false,
-                        async: false,
                         cache: false,
                         data: formData,
                         beforeSend: xhr => {
@@ -106,15 +105,18 @@
                             app.request.loading = false;
                             app.request.successful = true;
                             app.request.title = $("#Input_Title").val();
+                            form.reset();
                         },
                         error: (xhr, textStatus, errorThrown) => {
                             app.request.loading = false;
                             app.request.successful = false;
                             app.request.errorMsg = textStatus;
+                            console.log(errorThrown);
+                        },
+                        complete: (xhr) => {
+                            app.initialized = true;
                         }
                     });
-
-                    $(form).reset();
                 }              
             });
         });   
