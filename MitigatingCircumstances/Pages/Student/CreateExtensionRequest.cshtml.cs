@@ -45,11 +45,7 @@ namespace MitigatingCircumstances.Pages.Student
         public CreateExtensionRequestModel(UserManager<ApplicationUser> userManager)
         {
             _userManager = userManager;
-        }
-
-        public async void OnGetAsync()
-        {
-            await InitializeTutors();
+            InitializeTutors().Wait();
         }
 
         private async Task InitializeTutors()

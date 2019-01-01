@@ -46,24 +46,23 @@
             </div>
         </div>
 
-        <br />
+        <div id="formUserFeedback" v-cloak>
+            <div v-if="request.loading" class="progress">
+                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
+            </div>
 
-        <div class="progress">
-            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
-        </div>
-
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            Your extension request titled <strong id="alert-text"></strong> has been created successfully
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-
-        <div class="alert alert-warning alert-dismissible fade show" role="alert">
-            <strong>Holy guacamole!</strong> There was an error creating your extension request
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
+            <div v-if="request.successful" class="alert alert-success alert-dismissible fade show" role="alert">
+                Your extension request titled <strong>{{request.title}}</strong> has been created successfully
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div v-else class="alert alert-warning alert-dismissible fade show" role="alert">
+                <strong>Holy guacamole!</strong> There was an error creating your extension request {{request.errorMsg}}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
         </div>
     </div>
 </div>
@@ -72,25 +71,51 @@
     <partial name="_ValidationScriptsPartial" />
     <script>
         $(() => {
-            $("#createExtensionRequestForm").on("submit", function (e) {
-                e.preventDefault();
-
-                var form_data = new FormData($('#createExtensionRequestForm')[0]);
-
-                $.ajax({
-                    type: 'POST',
-                    url: '/api/extension_request/create',
-                    processData: false,
-                    contentType: false,
-                    async: false,
-                    cache: false,
-                    data: form_data,
-                    success: function (response) {
-
+            var app = new Vue({
+                el: '#formUserFeedback',
+                data: {                   
+                    request: {
+                        loading: false,
+                        successful: false,
+                        title: "undefined",
+                        errorMsg: "undefined"
                     }
-                });
+                }
+            });
 
-                $('#createExtensionRequestForm')[0].reset();
+            let form = $("#createExtensionRequestForm")[0];
+
+            $(form).on("submit", e => {
+                e.preventDefault();
+                
+                if (! app.request.loading && $(form).valid()) {
+                    var formData = new FormData($(form));
+
+                    $.ajax({
+                        type: "POST",
+                        url: "/api/extension_request/create",
+                        processData: false,
+                        contentType: false,
+                        async: false,
+                        cache: false,
+                        data: formData,
+                        beforeSend: xhr => {
+                            app.request.loading = true;
+                        },
+                        success: (r, xhr) => {
+                            app.request.loading = false;
+                            app.request.successful = true;
+                            app.request.title = $("#Input_Title").val();
+                        },
+                        error: (xhr, textStatus, errorThrown) => {
+                            app.request.loading = false;
+                            app.request.successful = false;
+                            app.request.errorMsg = textStatus;
+                        }
+                    });
+
+                    $(form).reset();
+                }              
             });
         });   
     </script>
