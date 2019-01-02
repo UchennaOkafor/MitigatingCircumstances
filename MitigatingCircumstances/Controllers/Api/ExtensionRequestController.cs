@@ -53,7 +53,7 @@ namespace MitigatingCircumstances.Controllers.Api
 
             _extensionRequestRepository.SaveExtensionRequest(extensionRequest);
 
-            //_mailService.SendTeacherCreatedNotificationEmail(tutor, student, extensionRequest);
+            _mailService.SendTeacherCreatedNotificationEmail(tutor, student, extensionRequest);
 
             return Created(string.Empty, extensionRequest);
         }
