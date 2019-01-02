@@ -9,6 +9,7 @@ using MitigatingCircumstances.Models.Enum;
 using System.Linq;
 using MitigatingCircumstances.Pages.Student;
 using System.ComponentModel.DataAnnotations;
+using MitigatingCircumstances.Models.Static;
 
 namespace MitigatingCircumstances.Controllers.Api
 {
@@ -30,6 +31,7 @@ namespace MitigatingCircumstances.Controllers.Api
         }
 
         [HttpPost]
+        [Authorize(Roles = Roles.Student)]
         public async Task<IActionResult> Create([FromForm] CreateExtensionRequestModel.InputModel form)
         {
             var student = await _userManager.GetUserAsync(User);
@@ -57,8 +59,9 @@ namespace MitigatingCircumstances.Controllers.Api
             return Created(string.Empty, extensionRequest);
         }
 
-        [HttpPost("change_state")]
-        public async Task<IActionResult> ChangeState([FromForm] ChangeStateRequest input)
+        [HttpPost]
+        [Authorize(Roles = Roles.Tutor)]
+        public async Task<IActionResult> EditStatus([FromForm] EditStatusRequest input)
         {
             var tutor = await _userManager.GetUserAsync(User);
 
@@ -67,10 +70,26 @@ namespace MitigatingCircumstances.Controllers.Api
 
             if (extensionRequest?.TutorAssignedTo?.Id == tutor?.Id)
             {
-                _extensionRequestRepository.ChangeExtensionRequestState(extensionRequest, input.NewState);
+                _extensionRequestRepository.ChangeExtensionRequestState(extensionRequest, input.NewStatus);
+                return Ok();
+            }
 
-                _mailService.SendTeacherRequestMoreInfoEmail(tutor, 
-                    extensionRequest.StudentCreatedBy, extensionRequest, input.ReplyMessage);
+            return BadRequest();
+        }
+
+        [HttpPost]
+        [Authorize(Roles = Roles.Tutor)]
+        public async Task<IActionResult> RequestMoreInformation([FromForm] RequestExtraInfo input)
+        {
+            var tutor = await _userManager.GetUserAsync(User);
+
+            var extensionRequest =
+                _extensionRequestRepository.GetExtensionRequestById(input.ExtensionRequestId);
+
+            if (extensionRequest?.TutorAssignedTo?.Id == tutor?.Id)
+            {
+                _mailService.SendTeacherRequestMoreInfoEmail(tutor,
+                    extensionRequest.StudentCreatedBy, extensionRequest, input.Message);
 
                 return Ok();
             }
@@ -78,16 +97,23 @@ namespace MitigatingCircumstances.Controllers.Api
             return BadRequest();
         }
 
-        public class ChangeStateRequest
+        public class EditStatusRequest
         {
             [Required]
             public int ExtensionRequestId { get; set; }
 
             [Required]
             [Range(1, 3)]
-            public ExtensionRequestStatus NewState { get; set; }
+            public ExtensionRequestStatus NewStatus { get; set; }
+        }
 
-            public string ReplyMessage { get; set; }
+        public class RequestExtraInfo
+        {
+            [Required]
+            public int ExtensionRequestId { get; set; }
+
+            [Required]
+            public string Message { get; set; }
         }
     }
 }

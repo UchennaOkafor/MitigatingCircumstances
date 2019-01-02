@@ -32,3 +32,12 @@
 [v-cloak] {
     display: none;
 }
+
+.extension-title {
+    font-size: 1.1rem;
+}
+
+.extension-description {
+    font-size: 1rem;
+    font-weight: 300;
+}

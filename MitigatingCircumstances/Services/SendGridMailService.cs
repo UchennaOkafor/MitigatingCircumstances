@@ -87,7 +87,7 @@ namespace MitigatingCircumstances.Services
             {
                 Recipient = new
                 {
-                    Name = teacher.Fullname
+                    Name = teacher.Firstname
                 },
                 Extension = new
                 {
@@ -107,13 +107,13 @@ namespace MitigatingCircumstances.Services
         }
 
         public async void SendTeacherRequestMoreInfoEmail(ApplicationUser teacher,
-    ApplicationUser student, ExtensionRequest extensionRequest, string requestMessage)
+            ApplicationUser student, ExtensionRequest extensionRequest, string requestMessage)
         {
             var dynamicTemplateData = new
             {
                 Student = new
                 {
-                    Name = student.Fullname
+                    Name = student.Firstname
                 },
                 Teacher = new
                 {

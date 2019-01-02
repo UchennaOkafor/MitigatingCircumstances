@@ -20,32 +20,39 @@
             <div class="card-body">
                 <h5 class="card-title text-center">Review extension request</h5>
                 <div class="form-group">
-                    <h6>Student</h6>
-                    <p>@Model.ExtensionRequest.StudentCreatedBy.Fullname</p>
+                    <h6 class="extension-title">Student</h6>
+                    <p class="extension-description">@Model.ExtensionRequest.StudentCreatedBy.Fullname</p>
                 </div>
 
                 <div class="form-group">
-                    <h6>Title</h6>
-                    <p>@Model.ExtensionRequest.Title</p>
+                    <h6 class="extension-title">Title</h6>
+                    <p class="extension-description">@Model.ExtensionRequest.Title</p>
                 </div>
 
                 <div class="form-group">
-                    <h6>Description</h6>
-                    <p> @Model.ExtensionRequest.Description</p>
+                    <h6 class="extension-title">Description</h6>
+                    <p class="extension-description">@Model.ExtensionRequest.Description</p>
                 </div>
 
                 <div class="form-group">
-                    <h6>Uploaded documents</h6>
-                    <ul>
-                        @foreach (var document in Model.ExtensionRequest.UploadedDocuments)
-                        {
-                            <li><a href="@document.MediaLink">@document.Name</a></li>
-                        }
-                    </ul>
+                    <h6 class="extension-title">Uploaded documents</h6>
+                    @if ((Model.ExtensionRequest.UploadedDocuments?.Any()) == true)
+                    {
+                        <ul>
+                            @foreach (var document in Model.ExtensionRequest.UploadedDocuments)
+                            {
+                                <li><a href="@document.MediaLink">@document.Name</a></li>
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <p class="extension-description">No documents uploaded</p>
+                    }
                 </div>
 
                 <div class="form-group">
-                    <h6>Status</h6>
+                    <h6 class="extension-title">Status</h6>
                     <p>
                         @switch (Model.ExtensionRequest.Status)
                         {
@@ -66,40 +73,38 @@
                                 break;
                         }
                     </p>
+
+                    <div>
+                        <p class="float-right">
+                            <button type="submit" data-new-status="1" class="btn btn-sm btn-success change-extension-state">
+                                Approve
+                            </button>
+
+                            <button type="submit" data-new-status="2" class="btn btn-sm btn-danger change-extension-state">
+                                Reject
+                            </button>
+
+                            <button type="submit" data-new-status="3" class="btn btn-sm btn-secondary change-extension-state">
+                                Close
+                            </button>
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-
-@if (Model.ExtensionRequest.Status == ExtensionRequestStatus.Open)
+<br />
+@if (Model.ExtensionRequest.Status != ExtensionRequestStatus.Approved)
 {
-    <br />
     <div class="row justify-content-center">
         <div class="col-sm-12 col-xs-12 col-md-10 col-lg-7">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="text-center">Action</h5>
-                    <label>Reply</label>
-
-                    <textarea name="replyMessage" class="form-control" rows="4"></textarea>
-                    <input name="extensionRequestId" type="hidden" value="@Model.ExtensionRequest.Id"/>
-
-                    <br />
-                    <p class="float-right">
-                        <button data-button-action="1" class="btn btn-success change-extension-state">
-                            Approve
-                        </button>
-
-                        <button data-button-action="2" class="btn btn-danger change-extension-state">
-                            Reject
-                        </button>
-
-                        <button data-button-action="3" class="btn btn-secondary change-extension-state">
-                            Close
-                        </button>
-                    </p>
+                    <h6 class="extension-title">Request more information</h6>
+                    <textarea id="message" style="margin-top: 0.7rem;" class="form-control" rows="4"></textarea>
+                    <button id="requestMoreInformation" style="margin-top: 0.7rem;" class="btn btn-primary float-right">Submit</button>
                 </div>
             </div>
         </div>
@@ -110,7 +115,8 @@
     <partial name="_ValidationScriptsPartial" />
     <script>
         $(() => {
-            let form = $("#reviewExtensionForm")[0];
+            let extensionRequestId = @Model.ExtensionRequest.Id;
+
             let app = new Vue({
                 el: "#formUserFeedback",
                 data: {
@@ -124,29 +130,46 @@
                 }
             });
 
-            var attrName = "data-button-action";
-
+            let attrName = "data-new-status";
             $(`button[${attrName}]`).on("click", e => {
-                var action = $(e.currentTarget).attr(attrName);
+                var status = $(e.currentTarget).attr(attrName);
+
+                $.ajax({
+                    type: "POST",
+                    url: "/api/extension_request/EditStatus",
+                    data: {
+                        newStatus: status,
+                        extensionRequestId: extensionRequestId
+                    },
+                    error: (xhr, textStatus, errorThrown) => {
+                        alert(xhr.responseText);
+                    },
+                    complete: (xhr) => {
+                        location.reload();
+                    }
+                });
+            });
+
+            $("#requestMoreInformation").on("click", e => {
+                let msgTxtBox = $("#message");
+
+                var data = {
+                    message: $(msgTxtBox).val(),
+                    extensionRequestId: extensionRequestId
+                };
 
                 if (!app.request.loading) {
-                    var formData = new FormData(form);
-
                     $.ajax({
                         type: "POST",
-                        url: "/api/extension_request/change_state",
-                        processData: false,
-                        contentType: false,
-                        cache: false,
-                        data: formData,
+                        url: "/api/extension_request/RequestMoreInformation",
+                        data: data,
                         beforeSend: xhr => {
                             app.request.loading = true;
                         },
                         success: (r, xhr) => {
                             app.request.loading = false;
                             app.request.successful = true;
-                            app.request.title = $("#Input_Title").val();
-                            form.reset();
+                            msgTxtBox.val("");
                         },
                         error: (xhr, textStatus, errorThrown) => {
                             app.request.loading = false;
