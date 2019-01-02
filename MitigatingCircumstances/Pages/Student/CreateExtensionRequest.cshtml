@@ -55,7 +55,7 @@
             </div>
             <div v-if="initialized && ! request.loading">
                 <div v-if="request.successful" class="alert alert-success alert-dismissible show" role="alert">
-                    Your extension request titled <strong>{{request.title}}</strong> has been created successfully
+                    Your extension request <strong>"{{request.title}}"</strong> has been created.
                 </div>
                 <div v-else class="alert alert-warning alert-dismissible show" role="alert">
                     There was an error creating your extension request. <strong>{{request.errorMsg}}</strong>
