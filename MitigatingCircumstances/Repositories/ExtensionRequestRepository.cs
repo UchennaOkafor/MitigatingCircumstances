@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using MitigatingCircumstances.Models;
+using MitigatingCircumstances.Models.Enum;
 using MitigatingCircumstances.Repositories.Base;
 using MitigatingCircumstances.Services.Interface;
 using System.Collections.Generic;
@@ -29,6 +30,12 @@ namespace MitigatingCircumstances.Repositories
         public IEnumerable<ExtensionRequest> GetExtensionRequestsCreatedBy(string studentId)
         {
             return Context.ExtensionRequests.Where(er => er.StudentCreatedBy.Id == studentId).OrderBy(er => er.Status);
+        }
+
+        public void ChangeExtensionRequestState(ExtensionRequest extensionRequest, ExtensionRequestStatus newStatus)
+        {
+            extensionRequest.Status = newStatus;
+            SaveChanges();
         }
 
         public List<UploadedDocument> UploadFilesFor(ExtensionRequest extensionRequest, List<IFormFile> formFiles)

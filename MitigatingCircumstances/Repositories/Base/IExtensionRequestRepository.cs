@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using MitigatingCircumstances.Models;
+using MitigatingCircumstances.Models.Enum;
 using System.Collections.Generic;
 
 namespace MitigatingCircumstances.Repositories.Base
@@ -11,6 +12,8 @@ namespace MitigatingCircumstances.Repositories.Base
         IEnumerable<ExtensionRequest> GetExtensionRequestsAssignedTo(string tutorId);
 
         IEnumerable<ExtensionRequest> GetExtensionRequestsCreatedBy(string studentId);
+
+        void ChangeExtensionRequestState(ExtensionRequest extensionRequest, ExtensionRequestStatus newStatus);
 
         List<UploadedDocument> UploadFilesFor(ExtensionRequest extensionRequest, List<IFormFile> formFiles);
 

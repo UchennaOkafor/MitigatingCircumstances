@@ -1,6 +1,4 @@
-﻿using System.Net;
-using System.Net.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using MitigatingCircumstances.Models;
 using MitigatingCircumstances.Repositories.Base;
@@ -10,6 +8,7 @@ using System.Threading.Tasks;
 using MitigatingCircumstances.Models.Enum;
 using System.Linq;
 using MitigatingCircumstances.Pages.Student;
+using System.ComponentModel.DataAnnotations;
 
 namespace MitigatingCircumstances.Controllers.Api
 {
@@ -58,12 +57,37 @@ namespace MitigatingCircumstances.Controllers.Api
             return Created(string.Empty, extensionRequest);
         }
 
-        [HttpPost]
-        public ActionResult<HttpResponseMessage> ChangeState()
+        [HttpPost("change_state")]
+        public async Task<IActionResult> ChangeState([FromForm] ChangeStateRequest input)
         {
+            var tutor = await _userManager.GetUserAsync(User);
 
+            var extensionRequest = 
+                _extensionRequestRepository.GetExtensionRequestById(input.ExtensionRequestId);
 
-            return new HttpResponseMessage(HttpStatusCode.Accepted);
+            if (extensionRequest?.TutorAssignedTo?.Id == tutor?.Id)
+            {
+                _extensionRequestRepository.ChangeExtensionRequestState(extensionRequest, input.NewState);
+
+                _mailService.SendTeacherRequestMoreInfoEmail(tutor, 
+                    extensionRequest.StudentCreatedBy, extensionRequest, input.ReplyMessage);
+
+                return Ok();
+            }
+
+            return BadRequest();
+        }
+
+        public class ChangeStateRequest
+        {
+            [Required]
+            public int ExtensionRequestId { get; set; }
+
+            [Required]
+            [Range(1, 3)]
+            public ExtensionRequestStatus NewState { get; set; }
+
+            public string ReplyMessage { get; set; }
         }
     }
 }
