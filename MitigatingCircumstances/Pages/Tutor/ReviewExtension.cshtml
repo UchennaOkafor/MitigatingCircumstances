@@ -107,6 +107,12 @@
                     <button id="requestMoreInformation" style="margin-top: 0.7rem;" class="btn btn-primary float-right">Submit</button>
                 </div>
             </div>
+
+            <div id="formUserFeedback" v-if="initialized" v-cloak>
+                <div v-if="successful" class="alert alert-success alert-dismissible show" role="alert">
+                    The message has been sent to the student requesting more information.
+                </div>
+            </div>
         </div>
     </div>
 }
@@ -116,21 +122,8 @@
     <script>
         $(() => {
             let extensionRequestId = @Model.ExtensionRequest.Id;
-
-            let app = new Vue({
-                el: "#formUserFeedback",
-                data: {
-                    initialized: false,
-                    request: {
-                        loading: false,
-                        successful: false,
-                        title: "undefined",
-                        errorMsg: "undefined"
-                    }
-                }
-            });
-
             let attrName = "data-new-status";
+
             $(`button[${attrName}]`).on("click", e => {
                 var status = $(e.currentTarget).attr(attrName);
 
@@ -150,6 +143,14 @@
                 });
             });
 
+            let app = new Vue({
+                el: "#formUserFeedback",
+                data: {
+                    initialized: false,
+                    successful: false
+                }
+            });
+
             $("#requestMoreInformation").on("click", e => {
                 let msgTxtBox = $("#message");
 
@@ -158,29 +159,24 @@
                     extensionRequestId: extensionRequestId
                 };
 
-                if (!app.request.loading) {
-                    $.ajax({
-                        type: "POST",
-                        url: "/api/extension_request/RequestMoreInformation",
-                        data: data,
-                        beforeSend: xhr => {
-                            app.request.loading = true;
-                        },
-                        success: (r, xhr) => {
-                            app.request.loading = false;
-                            app.request.successful = true;
-                            msgTxtBox.val("");
-                        },
-                        error: (xhr, textStatus, errorThrown) => {
-                            app.request.loading = false;
-                            app.request.successful = false;
-                            app.request.errorMsg = xhr.responseText;
-                        },
-                        complete: (xhr) => {
-                            app.initialized = true;
-                        }
-                    });
-                }
+                $.ajax({
+                    type: "POST",
+                    url: "/api/extension_request/RequestMoreInformation",
+                    data: data,
+                    beforeSend: xhr => {
+                        app.successful = false;
+                    },
+                    success: (r, xhr) => {
+                        app.successful = true;
+                        msgTxtBox.val("");
+                    },
+                    error: (xhr, textStatus, errorThrown) => {
+                        alert(xhr.responseText);
+                    },
+                    complete: (xhr) => {
+                        app.initialized = true;
+                    }
+                });
             });
         });
     </script>
