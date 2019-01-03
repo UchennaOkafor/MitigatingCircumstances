@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using MitigatingCircumstances.Models;
-using MitigatingCircumstances.Repositories.Base;
 using MitigatingCircumstances.Services.Interface;
 using Microsoft.AspNetCore.Authorization;
 using System.Threading.Tasks;
@@ -10,6 +9,7 @@ using System.Linq;
 using MitigatingCircumstances.Pages.Student;
 using System.ComponentModel.DataAnnotations;
 using MitigatingCircumstances.Models.Static;
+using MitigatingCircumstances.Repositories.Interface;
 
 namespace MitigatingCircumstances.Controllers.Api
 {
@@ -54,7 +54,7 @@ namespace MitigatingCircumstances.Controllers.Api
 
             _extensionRequestRepository.SaveExtensionRequest(extensionRequest);
 
-            _mailService.SendTeacherCreatedNotificationEmail(tutor, student, extensionRequest);
+            _mailService.SendExtensionCreatedEmailToTeacher(tutor, student, extensionRequest);
 
             return Created(string.Empty, extensionRequest);
         }
@@ -71,6 +71,7 @@ namespace MitigatingCircumstances.Controllers.Api
             if (extensionRequest?.TutorAssignedTo?.Id == tutor?.Id)
             {
                 _extensionRequestRepository.ChangeExtensionRequestState(extensionRequest, input.NewStatus);
+                _mailService.SendExtensionRequestChangeStateEmail(extensionRequest);
                 return Ok();
             }
 

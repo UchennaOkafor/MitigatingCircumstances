@@ -40,10 +40,8 @@ namespace MitigatingCircumstances.Areas.Identity.Pages.Account.Manage
             [EmailAddress]
             public string Email { get; set; }
 
-            [Required]
             public string Firstname { get; set; }
 
-            [Required]
             public string Lastname { get; set; }
 
             public string Role { get; set; }
@@ -95,6 +93,11 @@ namespace MitigatingCircumstances.Areas.Identity.Pages.Account.Manage
                     throw new InvalidOperationException($"Unexpected error occurred setting email for user with ID '{userId}'.");
                 }
             }
+
+            user.Firstname = Input.Firstname;
+            user.Lastname = Input.Lastname;
+
+            await _userManager.UpdateAsync(user);
 
             await _signInManager.RefreshSignInAsync(user);
             StatusMessage = "Your profile has been updated";

@@ -1,14 +1,17 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @using MitigatingCircumstances.Models
 @using MitigatingCircumstances.Models.Static
+@using MitigatingCircumstances.Repositories.Interface
 
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
+@inject INotificationRepository NotificationRepository
 
 <div class="collapse navbar-collapse" id="navbarSupportedContent">
     @if (SignInManager.IsSignedIn(User))
     {
         var appUser = await UserManager.GetUserAsync(User);
+        var notifications = NotificationRepository.GetUnreadNotificationsForUser(appUser.Id);
 
         <ul class="navbar-nav mr-auto">
             @if (User.IsInRole(Roles.Tutor))
@@ -29,10 +32,16 @@
 
         <ul class="navbar-nav flex-row ml-md-auto d-none d-md-flex">
             <li class="nav-item dropdown notification-badge">
-                <a class="nav-link" href="#">
+                <a class="nav-link" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i class="fas fa-bell"></i>
-                    <span class="badge badge-primary">4</span>
+                    <span class="badge badge-primary">@notifications?.Count</span>
                 </a>
+                <div class="dropdown-menu notification-menu scrollable-notification-menu" aria-labelledby="navbarDropdown">
+                    @foreach (var notification in notifications)
+                    {
+                        <button class="dropdown-item" type="button">@notification.Text</button>
+                    }
+                </div>
             </li>
 
             <li class="nav-item dropdown">

@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using MitigatingCircumstances.Models;
+using MitigatingCircumstances.Models.GoogleEntity;
+using MitigatingCircumstances.Repositories.Interface;
 using MitigatingCircumstances.Services.Interface;
 using SendGrid;
 using SendGrid.Helpers.Mail;
@@ -10,6 +12,7 @@ namespace MitigatingCircumstances.Services
     {
         private readonly SendGridClient _sendGridClient;
         private readonly EmailAddress _fromEmailAddress;
+        private readonly INotificationRepository _notificationRepository;
 
         private readonly string _userNotExistTemplateId;
         private readonly string _extensionRequestCreatedTemplateId;
@@ -18,8 +21,9 @@ namespace MitigatingCircumstances.Services
 
         private readonly string _urlDomain;
 
-        public SendGridMailService(IConfiguration config)
+        public SendGridMailService(IConfiguration config, INotificationRepository notificationRepository)
         {
+            _notificationRepository = notificationRepository;
             var apiKey = config["Mail:SendGridApiKey"];
             _sendGridClient = new SendGridClient(apiKey);
             _fromEmailAddress = new EmailAddress("no-reply@mail.supporthub.cloud", "Support Hub");
@@ -80,7 +84,13 @@ namespace MitigatingCircumstances.Services
             await _sendGridClient.SendEmailAsync(msg);
         }
 
-        public async void SendTeacherCreatedNotificationEmail(ApplicationUser teacher, 
+        /// <summary>
+        /// Sends a notification email to the teacher letting them know that a student has created an extension request
+        /// </summary>
+        /// <param name="teacher"></param>
+        /// <param name="student"></param>
+        /// <param name="extensionRequest"></param>
+        public async void SendExtensionCreatedEmailToTeacher(ApplicationUser teacher, 
             ApplicationUser student, ExtensionRequest extensionRequest)
         {
             var dynamicTemplateData = new
@@ -104,6 +114,14 @@ namespace MitigatingCircumstances.Services
                 _fromEmailAddress, to, _extensionCreatedTeacherNotificationTemplateId, dynamicTemplateData);
 
             await _sendGridClient.SendEmailAsync(msg);
+
+            var notification = new Notification
+            {
+                UserId = extensionRequest.TutorAssignedTo.Id,
+                Text = $"{extensionRequest.StudentCreatedBy.Fullname} has created a new extension"
+            };
+
+            _notificationRepository.InsertNotification(notification);
         }
 
         public async void SendTeacherRequestMoreInfoEmail(ApplicationUser teacher,
@@ -133,7 +151,26 @@ namespace MitigatingCircumstances.Services
             var msg = MailHelper.CreateSingleTemplateEmail(
                 _fromEmailAddress, to, _teacherRequestsMoreInfoTemplateId, dynamicTemplateData);
 
+            var notification = new Notification
+            {
+                UserId = extensionRequest.StudentCreatedBy.Id,
+                Text = $"{extensionRequest.TutorAssignedTo.Firstname} requires more information about your extension {extensionRequest.Title}"
+            };
+
+            _notificationRepository.InsertNotification(notification);
+
             await _sendGridClient.SendEmailAsync(msg);
+        }
+
+        public void SendExtensionRequestChangeStateEmail(ExtensionRequest extensionRequest)
+        {
+            var notification = new Notification
+            {
+                UserId = extensionRequest.StudentCreatedBy.Id,
+                Text = $"{extensionRequest.Title} state has been changed to {extensionRequest.Status.ToString()}"
+            };
+
+            _notificationRepository.InsertNotification(notification);
         }
     }
 }

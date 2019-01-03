@@ -1,7 +1,7 @@
 ﻿using MitigatingCircumstances.Models;
 using MitigatingCircumstances.Repositories.Interface;
 
-namespace MitigatingCircumstances.Repositories.Base
+namespace MitigatingCircumstances.Repositories
 {
     public class BaseRepository : IBaseRepository
     {

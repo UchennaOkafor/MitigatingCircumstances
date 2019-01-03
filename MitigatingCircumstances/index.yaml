@@ -1,0 +1,8 @@
+indexes:
+
+- kind: Notification
+  properties:
+  - name: user_id
+  - name: is_read
+  - name: created_at
+    direction: desc

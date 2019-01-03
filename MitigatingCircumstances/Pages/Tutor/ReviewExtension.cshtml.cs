@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MitigatingCircumstances.Models;
 using MitigatingCircumstances.Models.Static;
-using MitigatingCircumstances.Repositories.Base;
+using MitigatingCircumstances.Repositories.Interface;
 
 namespace MitigatingCircumstances.Pages.Tutor
 {

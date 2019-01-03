@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using MitigatingCircumstances.Models;
 using MitigatingCircumstances.Models.Enum;
-using MitigatingCircumstances.Repositories.Base;
+using MitigatingCircumstances.Repositories.Interface;
 using MitigatingCircumstances.Services.Interface;
 using System.Collections.Generic;
 using System.Linq;

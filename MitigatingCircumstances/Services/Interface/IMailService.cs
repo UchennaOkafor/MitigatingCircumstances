@@ -8,8 +8,10 @@ namespace MitigatingCircumstances.Services.Interface
 
         void SendInboundEmailDoesntExistEmail(string toEmail, string toName, string extensionRequestTitle);
 
-        void SendTeacherCreatedNotificationEmail(ApplicationUser teacher, ApplicationUser student, ExtensionRequest extensionRequest);
+        void SendExtensionCreatedEmailToTeacher(ApplicationUser teacher, ApplicationUser student, ExtensionRequest extensionRequest);
 
         void SendTeacherRequestMoreInfoEmail(ApplicationUser teacher, ApplicationUser student, ExtensionRequest extensionRequest, string requestMessage);
+
+        void SendExtensionRequestChangeStateEmail(ExtensionRequest extensionRequest);
     }
 }

@@ -9,8 +9,8 @@ using Microsoft.AspNetCore.Identity;
 using MitigatingCircumstances.Models;
 using MitigatingCircumstances.Models.Enum;
 using MitigatingCircumstances.Models.Static;
-using MitigatingCircumstances.Repositories.Base;
 using MitigatingCircumstances.Services.Interface;
+using MitigatingCircumstances.Repositories.Interface;
 
 namespace MitigatingCircumstances.Controllers.Api
 {
@@ -64,7 +64,7 @@ namespace MitigatingCircumstances.Controllers.Api
 
                 _mailService.SendInboundEmailExtensionCreated(email.Envelope.From, email.SendersName, extensionRequest);
 
-                _mailService.SendTeacherCreatedNotificationEmail(extensionRequest.TutorAssignedTo, 
+                _mailService.SendExtensionCreatedEmailToTeacher(extensionRequest.TutorAssignedTo, 
                     extensionRequest.StudentCreatedBy, extensionRequest);
 
                 return new HttpResponseMessage(HttpStatusCode.Created);

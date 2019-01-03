@@ -1,7 +1,6 @@
 ﻿using Google.Cloud.Datastore.V1;
 using Microsoft.Extensions.DependencyInjection;
 using MitigatingCircumstances.Repositories;
-using MitigatingCircumstances.Repositories.Base;
 using MitigatingCircumstances.Repositories.Interface;
 using MitigatingCircumstances.Services;
 using MitigatingCircumstances.Services.Interface;
@@ -17,6 +16,7 @@ namespace MitigatingCircumstances.DependencyInjection
             services.AddTransient<IExtensionRequestRepository, ExtensionRequestRepository>();
             services.AddTransient<ICloudStorageService, GoogleCloudStorageService>();
             services.AddTransient<IMailService, SendGridMailService>();
+            services.AddTransient<INotificationRepository, NotificationRepository>();
         }
     }
 }

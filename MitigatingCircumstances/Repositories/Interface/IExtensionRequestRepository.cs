@@ -3,7 +3,7 @@ using MitigatingCircumstances.Models;
 using MitigatingCircumstances.Models.Enum;
 using System.Collections.Generic;
 
-namespace MitigatingCircumstances.Repositories.Base
+namespace MitigatingCircumstances.Repositories.Interface
 {
     public interface IExtensionRequestRepository
     {
