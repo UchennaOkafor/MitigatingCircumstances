@@ -118,7 +118,7 @@ namespace MitigatingCircumstances.Services
             var notification = new Notification
             {
                 UserId = extensionRequest.TutorAssignedTo.Id,
-                Text = $"{extensionRequest.StudentCreatedBy.Fullname} has created a new extension"
+                Text = $"{extensionRequest.StudentCreatedBy.Fullname} has created a new extension {extensionRequest.Title}"
             };
 
             _notificationRepository.InsertNotification(notification);

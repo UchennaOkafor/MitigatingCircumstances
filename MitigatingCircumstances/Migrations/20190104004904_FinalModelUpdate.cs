@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace MitigatingCircumstances.Migrations
 {
-    public partial class UpdatedModels : Migration
+    public partial class FinalModelUpdate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -54,7 +54,7 @@ namespace MitigatingCircumstances.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     RoleId = table.Column<string>(nullable: false),
                     ClaimType = table.Column<string>(nullable: true),
                     ClaimValue = table.Column<string>(nullable: true)
@@ -75,7 +75,7 @@ namespace MitigatingCircumstances.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     UserId = table.Column<string>(nullable: false),
                     ClaimType = table.Column<string>(nullable: true),
                     ClaimValue = table.Column<string>(nullable: true)
@@ -160,7 +160,7 @@ namespace MitigatingCircumstances.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     StudentCreatedById = table.Column<string>(nullable: true),
                     TutorAssignedToId = table.Column<string>(nullable: true),
                     Title = table.Column<string>(nullable: true),
@@ -186,39 +186,11 @@ namespace MitigatingCircumstances.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ExtensionRequestReplies",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    ExtensionRequestId = table.Column<int>(nullable: true),
-                    UserId = table.Column<string>(nullable: true),
-                    Comment = table.Column<string>(nullable: true),
-                    CreatedAt = table.Column<DateTime>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ExtensionRequestReplies", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ExtensionRequestReplies_ExtensionRequests_ExtensionRequestId",
-                        column: x => x.ExtensionRequestId,
-                        principalTable: "ExtensionRequests",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_ExtensionRequestReplies_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "UploadedDocuments",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     CloudId = table.Column<string>(nullable: true),
                     ExtensionRequestId = table.Column<int>(nullable: true),
                     UploadedById = table.Column<string>(nullable: true),
@@ -253,7 +225,8 @@ namespace MitigatingCircumstances.Migrations
                 name: "RoleNameIndex",
                 table: "AspNetRoles",
                 column: "NormalizedName",
-                unique: true);
+                unique: true,
+                filter: "[NormalizedName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserClaims_UserId",
@@ -279,17 +252,8 @@ namespace MitigatingCircumstances.Migrations
                 name: "UserNameIndex",
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ExtensionRequestReplies_ExtensionRequestId",
-                table: "ExtensionRequestReplies",
-                column: "ExtensionRequestId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ExtensionRequestReplies_UserId",
-                table: "ExtensionRequestReplies",
-                column: "UserId");
+                unique: true,
+                filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ExtensionRequests_StudentCreatedById",
@@ -328,9 +292,6 @@ namespace MitigatingCircumstances.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
-
-            migrationBuilder.DropTable(
-                name: "ExtensionRequestReplies");
 
             migrationBuilder.DropTable(
                 name: "UploadedDocuments");

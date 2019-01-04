@@ -34,7 +34,7 @@ namespace MitigatingCircumstances.Seeder
         {
             var userManager = provider.GetRequiredService<UserManager<ApplicationUser>>();
             var dbContext = provider.GetRequiredService<ApplicationDbContext>();
-            var testUser = await userManager.FindByEmailAsync("jakepaul@test.com");
+            var testUser = await userManager.FindByEmailAsync("johndoe1337@mailinator.com");
 
             if (testUser != null)
             {
@@ -43,35 +43,25 @@ namespace MitigatingCircumstances.Seeder
 
             var teacher1 = new ApplicationUser
             {
-                Firstname = "Jake",
-                Lastname = "Paul",
-                Email = "jakepaul@test.com",
-                UserName = "jakepaul@test.com"
+                Firstname = "John",
+                Lastname = "Doe",
+                Email = "johndoe1337@mailinator.com",
+                UserName = "johndoe1337@mailinator.com"
             };
 
             var teacher2 = new ApplicationUser
             {
-                Firstname = "Logan",
-                Lastname = "Paul",
-                Email = "loganpaul@test.com",
-                UserName = "loganpaul@test.com"
+                Firstname = "Mary",
+                Lastname = "Doe",
+                Email = "marydoe1337@mailinator.com",
+                UserName = "marydoe1337@mailinator.com"
             };
 
-            var teacher3 = new ApplicationUser
-            {
-                Firstname = "Mike",
-                Lastname = "Pound",
-                Email = "mikepound@test.com",
-                UserName = "mikepound@test.com"
-            };
-
-            await userManager.CreateAsync(teacher1, "LoveTheBest282aaassxx!");
-            await userManager.CreateAsync(teacher2, "LoveTheBest282JBHFGH!{}");
-            await userManager.CreateAsync(teacher3, "LoveTheBest282x'#]][");
+            await userManager.CreateAsync(teacher1, "JohnDoe1337!");
+            await userManager.CreateAsync(teacher2, "MaryDoe1337!");
 
             await userManager.AddToRoleAsync(teacher1, Roles.Tutor);
             await userManager.AddToRoleAsync(teacher2, Roles.Tutor);
-            await userManager.AddToRoleAsync(teacher3, Roles.Tutor);
         }
     }
 }

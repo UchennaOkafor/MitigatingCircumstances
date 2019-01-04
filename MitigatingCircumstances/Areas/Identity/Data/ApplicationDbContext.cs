@@ -16,8 +16,6 @@ namespace MitigatingCircumstances.Models
 
         public DbSet<ExtensionRequest> ExtensionRequests { get; set; }
 
-        public DbSet<ExtensionRequestReply> ExtensionRequestReplies { get; set; }
-
         public DbSet<UploadedDocument> UploadedDocuments { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -41,8 +39,8 @@ namespace MitigatingCircumstances.Models
 
             var builder = new DbContextOptionsBuilder<ApplicationDbContext>();
 
-            builder.UseMySql(config.GetConnectionString("GoogleCloudMySql"));
-            //builder.UseSqlServer(config.GetConnectionString("LocalMsSqlServer"));
+            //builder.UseMySql(config.GetConnectionString("GoogleCloudMySql"));
+            builder.UseSqlServer(config.GetConnectionString("LocalMsSqlServer"));
 
             return new ApplicationDbContext(builder.Options);
         }

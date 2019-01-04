@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MitigatingCircumstances.Models;
@@ -9,15 +10,16 @@ using MitigatingCircumstances.Models;
 namespace MitigatingCircumstances.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20181228171505_UpdatedModels")]
-    partial class UpdatedModels
+    [Migration("20190104004904_FinalModelUpdate")]
+    partial class FinalModelUpdate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "2.1.4-rtm-31024")
-                .HasAnnotation("Relational:MaxIdentifierLength", 64);
+                .HasAnnotation("Relational:MaxIdentifierLength", 128)
+                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
@@ -37,7 +39,8 @@ namespace MitigatingCircumstances.Migrations
 
                     b.HasIndex("NormalizedName")
                         .IsUnique()
-                        .HasName("RoleNameIndex");
+                        .HasName("RoleNameIndex")
+                        .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles");
                 });
@@ -45,7 +48,8 @@ namespace MitigatingCircumstances.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("ClaimType");
 
@@ -64,7 +68,8 @@ namespace MitigatingCircumstances.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("ClaimType");
 
@@ -175,7 +180,8 @@ namespace MitigatingCircumstances.Migrations
 
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
-                        .HasName("UserNameIndex");
+                        .HasName("UserNameIndex")
+                        .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
                 });
@@ -183,7 +189,8 @@ namespace MitigatingCircumstances.Migrations
             modelBuilder.Entity("MitigatingCircumstances.Models.ExtensionRequest", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<DateTime>("CreatedAt");
 
@@ -206,32 +213,11 @@ namespace MitigatingCircumstances.Migrations
                     b.ToTable("ExtensionRequests");
                 });
 
-            modelBuilder.Entity("MitigatingCircumstances.Models.ExtensionRequestReply", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Comment");
-
-                    b.Property<DateTime>("CreatedAt");
-
-                    b.Property<int?>("ExtensionRequestId");
-
-                    b.Property<string>("UserId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ExtensionRequestId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("ExtensionRequestReplies");
-                });
-
             modelBuilder.Entity("MitigatingCircumstances.Models.UploadedDocument", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Bucket");
 
@@ -310,17 +296,6 @@ namespace MitigatingCircumstances.Migrations
                     b.HasOne("MitigatingCircumstances.Models.ApplicationUser", "TutorAssignedTo")
                         .WithMany()
                         .HasForeignKey("TutorAssignedToId");
-                });
-
-            modelBuilder.Entity("MitigatingCircumstances.Models.ExtensionRequestReply", b =>
-                {
-                    b.HasOne("MitigatingCircumstances.Models.ExtensionRequest", "ExtensionRequest")
-                        .WithMany()
-                        .HasForeignKey("ExtensionRequestId");
-
-                    b.HasOne("MitigatingCircumstances.Models.ApplicationUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("MitigatingCircumstances.Models.UploadedDocument", b =>
