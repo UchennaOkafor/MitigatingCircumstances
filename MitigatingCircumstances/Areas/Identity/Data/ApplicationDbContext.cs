@@ -39,8 +39,8 @@ namespace MitigatingCircumstances.Models
 
             var builder = new DbContextOptionsBuilder<ApplicationDbContext>();
 
-            //builder.UseMySql(config.GetConnectionString("GoogleCloudMySql"));
-            builder.UseSqlServer(config.GetConnectionString("LocalMsSqlServer"));
+            builder.UseMySql(config.GetConnectionString("GoogleCloudMySql"));
+            //builder.UseSqlServer(config.GetConnectionString("LocalMsSqlServer"));
 
             return new ApplicationDbContext(builder.Options);
         }
