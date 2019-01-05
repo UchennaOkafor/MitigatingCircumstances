@@ -13,7 +13,7 @@
         var appUser = await UserManager.GetUserAsync(User);
         var notifications = NotificationRepository.GetUnreadNotificationsForUser(appUser.Id);
 
-        <ul class="navbar-nav mr-auto">
+        <ul class="nav navbar-nav mr-auto">
             @if (User.IsInRole(Roles.Tutor))
             {
                 <li class="nav-item">
@@ -30,13 +30,15 @@
             }
         </ul>
 
-        <ul class="navbar-nav flex-row ml-md-auto d-none d-md-flex">
+        <ul class="nav navbar-nav ml-auto  justify-content-end">
             <li class="nav-item dropdown notification-badge">
                 <a class="nav-link" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i class="fas fa-bell"></i>
                     <span class="badge badge-primary">@notifications?.Count</span>
                 </a>
                 <div class="dropdown-menu notification-menu scrollable-notification-menu" aria-labelledby="navbarDropdown">
+                    <h6 class="dropdown-header text-center">Notifications</h6>
+                    <div class="dropdown-divider"></div>
                     @foreach (var notification in notifications)
                     {
                         <button class="dropdown-item" type="button">@notification.Text</button>
@@ -61,7 +63,7 @@
     }
     else
     {
-        <ul class="navbar-nav flex-row ml-md-auto d-none d-md-flex">
+        <ul class="nav navbar-nav ml-auto w-100 justify-content-end">
             <li class="nav-item">
                 <a asp-area="Identity" asp-page="/Account/Login" class="nav-link">Login</a>
             </li>
