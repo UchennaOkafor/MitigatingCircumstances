@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using MitigatingCircumstances.Models.Enum;
 using Newtonsoft.Json;
 
@@ -9,8 +7,6 @@ namespace MitigatingCircumstances.Models
 {
     public class ExtensionRequest
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
         [JsonIgnore]
